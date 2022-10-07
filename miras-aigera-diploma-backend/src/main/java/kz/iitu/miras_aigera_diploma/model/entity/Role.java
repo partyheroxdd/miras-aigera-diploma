@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -32,9 +33,11 @@ public class Role implements GrantedAuthority {
   private String name;
 
   @ManyToMany(mappedBy = "roles")
+  @JsonIgnore
   private Set<User> users = new HashSet<>();
 
   @Override
+  @JsonIgnore
   public String getAuthority() {
     return this.name;
   }

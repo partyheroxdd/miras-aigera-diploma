@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -64,6 +65,7 @@ public class User {
           name = "role_id", referencedColumnName = "id"
       )
   )
+  @JsonIgnore
   private Set<Role> roles = new HashSet<>();
 
 }
