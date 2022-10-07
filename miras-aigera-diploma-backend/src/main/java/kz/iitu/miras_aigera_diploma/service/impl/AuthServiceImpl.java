@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
       username = user.getUsername();
       roles = user.getRoles();
       userRepository.save(user);
-      log.info("User successfully registered {}", user);
+      log.info("User successfully registered {} with role {}", user, userRegisterDto.getRoles());
     } catch (Exception e) {
       log.error(e.getMessage());
     }

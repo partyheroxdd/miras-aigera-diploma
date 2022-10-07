@@ -18,7 +18,7 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public Role saveRole(Role role) {
-    log.info("Saving role {}", role.toString());
+    log.info("Saving role {}", role.getName());
     if (!role.getName().startsWith("ROLE_")) {
       throw new RoleNameException("User's role must be start with [ROLE_]");
     }
@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService {
 
     Role role = roleRepository.findById(id).orElse(null);
     if (role != null) {
-      log.info("Getting role {} with id {}", role, id);
+      log.info("Getting role {} with id {}", role.getName(), id);
     }
 
     return role;

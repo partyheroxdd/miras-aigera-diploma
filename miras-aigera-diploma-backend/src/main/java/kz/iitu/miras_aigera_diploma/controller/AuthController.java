@@ -1,9 +1,10 @@
 package kz.iitu.miras_aigera_diploma.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import kz.iitu.miras_aigera_diploma.Security.AccessToken;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
-import kz.iitu.miras_aigera_diploma.repository.UserRepository;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

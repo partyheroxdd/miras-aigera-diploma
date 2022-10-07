@@ -4,7 +4,7 @@ services:
     container_name: diploma-app-backend
     image: diploma-app-backend
     build:
-      context: miras_aigera_diploma
+      context: miras-aigera-diploma-backendz
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
