@@ -1,12 +1,14 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.exceptions.RoleNameException;
+import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
+import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,11 +20,12 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public Role saveRole(Role role) {
-    log.info("Saving role {}", role.getName());
     if (!role.getName().startsWith("ROLE_")) {
-      throw new RoleNameException("User's role must be start with [ROLE_]");
+      throw new CustomSecurityException(ApiMessages.INVALID_ROLE_NAME, HttpStatus.BAD_REQUEST);
     }
-    return roleRepository.save(role);
+    Role saveRole = roleRepository.save(role);
+    log.info("Saving role {}", saveRole.getName());
+    return saveRole;
   }
 
   @Override

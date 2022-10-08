@@ -43,10 +43,13 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public AccessToken register(UserRegisterDto userRegisterDto) {
-    checkUserExistsWithUserName(userRegisterDto.getUsername());
+    if (!userRegisterDto.getUsername().matches("\\d+")) {
+      throw new CustomSecurityException(ApiMessages.INVALID_USERNAME, HttpStatus.BAD_REQUEST);
+    }
     String username = null;
     Set<Role> roles = null;
     try {
+      checkUserExistsWithUserName(userRegisterDto.getUsername());
       User user = User.builder()
           .username(userRegisterDto.getUsername())
           .fullName(userRegisterDto.getFullName())
