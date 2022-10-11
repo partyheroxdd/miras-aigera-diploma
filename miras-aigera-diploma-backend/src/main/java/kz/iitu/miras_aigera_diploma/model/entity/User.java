@@ -15,10 +15,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor()
 @Entity
@@ -50,7 +52,7 @@ public class User {
   @Column(name = "phone", unique = true, nullable = false)
   private String phone;
 
-  @Size(min = 8, message = "Password length must be minimum 8")
+  @Size(min = 8, message = "Password length must be minimum 8, maximum 40")
   @Column(name = "password")
   private String password;
 

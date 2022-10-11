@@ -1,4 +1,4 @@
-package kz.iitu.miras_aigera_diploma.Security;
+package kz.iitu.miras_aigera_diploma.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

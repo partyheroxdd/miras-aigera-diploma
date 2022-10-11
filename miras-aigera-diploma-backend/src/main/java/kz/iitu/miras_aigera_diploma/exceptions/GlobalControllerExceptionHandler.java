@@ -40,6 +40,20 @@ public class GlobalControllerExceptionHandler {
 
   }
 
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
+    ApiError apiError = new ApiError.
+        Builder()
+        .withMessage(ex.getMessage())
+        .withHttpStatus(ex.getHttpStatus())
+        .withCreatedAt()
+        .build();
+
+    return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+
+  }
+
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleGenericException(Exception exception) {
 

@@ -1,14 +1,13 @@
-package kz.iitu.miras_aigera_diploma.Security.jwt;
+package kz.iitu.miras_aigera_diploma.security.jwt;
 
 
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
-import kz.iitu.miras_aigera_diploma.Security.AccessToken;
-import kz.iitu.miras_aigera_diploma.Security.ITokenProvider;
-import kz.iitu.miras_aigera_diploma.Security.SecretKey;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
+import kz.iitu.miras_aigera_diploma.security.AccessToken;
+import kz.iitu.miras_aigera_diploma.security.ITokenProvider;
+import kz.iitu.miras_aigera_diploma.security.SecretKey;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

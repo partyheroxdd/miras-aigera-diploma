@@ -3,16 +3,17 @@ package kz.iitu.miras_aigera_diploma.service.impl;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import kz.iitu.miras_aigera_diploma.Security.AccessToken;
-import kz.iitu.miras_aigera_diploma.Security.ITokenProvider;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
+import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDTO;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
 import kz.iitu.miras_aigera_diploma.repository.UserRepository;
+import kz.iitu.miras_aigera_diploma.security.AccessToken;
+import kz.iitu.miras_aigera_diploma.security.ITokenProvider;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +64,8 @@ public class AuthServiceImpl implements AuthService {
       username = user.getUsername();
       roles = user.getRoles();
       userRepository.save(user);
-      log.info("User successfully registered {} with role {}", user, userRegisterDto.getRoles());
+      log.info("User {} successfully registered with role {}", userRegisterDto.getUsername(),
+          userRegisterDto.getRoles());
     } catch (Exception e) {
       log.error(e.getMessage());
     }
@@ -79,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
       Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(username, password));
       Set<Role> roles = userRepository.findByUsername(username).get().getRoles();
-      log.info("User successfully login {}", userLoginDto);
+      log.info("User successfully login {}", userLoginDto.getUsername());
       return tokenProvider.createToken(username, roles);
 
     } catch (AuthenticationException exception) {
@@ -108,4 +110,17 @@ public class AuthServiceImpl implements AuthService {
     return userRoles;
   }
 
+  @Override
+  public void changePassword(UserChangePasswordDTO userChangePasswordDTO) {
+    User user = userRepository.findByUsername(userChangePasswordDTO.getUsername()).orElseThrow(
+        () -> new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST));
+    log.info("Find user {} to change password", user.getUsername());
+    if (!passwordEncoder.matches(userChangePasswordDTO.getPassword(), user.getPassword())) {
+      throw new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
+    }
+
+    user.setPassword(passwordEncoder.encode(userChangePasswordDTO.getReTypedPassword()));
+
+    userRepository.save(user);
+  }
 }

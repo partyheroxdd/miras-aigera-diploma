@@ -1,9 +1,9 @@
-package kz.iitu.miras_aigera_diploma.Security.jwt;
+package kz.iitu.miras_aigera_diploma.security.jwt;
 
 import java.util.Set;
-import kz.iitu.miras_aigera_diploma.Security.AccessToken;
-import kz.iitu.miras_aigera_diploma.Security.SecretKey;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
+import kz.iitu.miras_aigera_diploma.security.AccessToken;
+import kz.iitu.miras_aigera_diploma.security.SecretKey;
 
 public interface IJwtTokenHelper {
 

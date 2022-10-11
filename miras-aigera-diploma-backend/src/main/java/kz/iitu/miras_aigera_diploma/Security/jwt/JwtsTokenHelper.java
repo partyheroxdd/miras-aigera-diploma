@@ -1,4 +1,4 @@
-package kz.iitu.miras_aigera_diploma.Security.jwt;
+package kz.iitu.miras_aigera_diploma.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -8,11 +8,11 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import kz.iitu.miras_aigera_diploma.Security.AccessToken;
-import kz.iitu.miras_aigera_diploma.Security.SecretKey;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
+import kz.iitu.miras_aigera_diploma.security.AccessToken;
+import kz.iitu.miras_aigera_diploma.security.SecretKey;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;

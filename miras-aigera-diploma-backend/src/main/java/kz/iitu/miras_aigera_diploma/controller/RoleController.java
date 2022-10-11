@@ -1,5 +1,8 @@
 package kz.iitu.miras_aigera_diploma.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
@@ -17,27 +20,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/role")
+@Tag(name = "Roles", description = "Roles API")
 public class RoleController {
 
   private final RoleService roleService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<Role> getRole(@PathVariable final Long id) {
+  @Operation(summary = "Method to get role with Id")
+  public ResponseEntity<Role> getRole(
+      @Parameter(description = "Role id") @PathVariable final Long id) {
     return ResponseEntity.ok(roleService.getRole(id));
   }
 
   @PostMapping
-  public ResponseEntity<Role> save(@RequestBody Role role) {
+  @Operation(summary = "Save new role")
+  public ResponseEntity<Role> save(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Role") @RequestBody Role role) {
     return ResponseEntity.ok(roleService.saveRole(role));
   }
 
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<?> delete(@PathVariable Long id) {
+  @Operation(summary = "Method to delete role with Id")
+  public ResponseEntity<?> delete(@Parameter(description = "Role id") @PathVariable Long id) {
     roleService.deleteRole(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping(value = "/all")
+  @Operation(summary = "Method to get all roles")
   public ResponseEntity<List<Role>> getAll() {
     return ResponseEntity.ok(roleService.getAllRoles());
   }
