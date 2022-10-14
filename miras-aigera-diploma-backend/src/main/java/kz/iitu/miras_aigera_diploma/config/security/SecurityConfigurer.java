@@ -31,14 +31,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    http.csrf().disable();
+    http.cors().and().csrf().disable();
 
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     http.
         authorizeRequests()
         .antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/role/**").access("hasRole('ROLE_ADMIN')")
+        .antMatchers("/api/roles/**").access("hasRole('ROLE_ADMIN')")
+        .antMatchers("/api/users/**").access("hasRole('ROLE_ADMIN')")
         .antMatchers("/api/lost-things-posts/approve/**")
         .access("hasAnyRole('ROLE_ADMIN', 'ROLE_POLICEMAN')")
         .anyRequest().authenticated();

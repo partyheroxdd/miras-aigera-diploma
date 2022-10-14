@@ -25,21 +25,20 @@ public class AuthController {
 
   @PostMapping("/register")
   @Operation(summary = "Method to registration user")
-  public ResponseEntity<AccessToken> register(
+  public ResponseEntity<String> register(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of User Register DTO")
       @RequestBody UserRegisterDto userRegisterDto) {
     AccessToken accessToken = authService.register(userRegisterDto);
-    return ResponseEntity.ok(accessToken);
-
+    return ResponseEntity.ok(accessToken.getToken());
   }
 
   @PostMapping("/login")
   @Operation(summary = "Method to login user")
-  public ResponseEntity<AccessToken> login(
+  public ResponseEntity<String> login(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of User Login DTO")
       @RequestBody UserLoginDto userLoginDto) {
     AccessToken accessToken = authService.login(userLoginDto);
-    return ResponseEntity.ok(accessToken);
+    return ResponseEntity.ok(accessToken.getToken());
   }
 
   @PostMapping("/password")

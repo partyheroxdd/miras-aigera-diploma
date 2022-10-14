@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/role")
+@RequestMapping("/api/roles")
 @Tag(name = "Roles", description = "Roles API")
 public class RoleController {
 
@@ -40,7 +40,7 @@ public class RoleController {
   }
 
   @DeleteMapping(value = "/{id}")
-  @Operation(summary = "Method to delete role with Id")
+  @Operation(summary = "Method to delete role by id")
   public ResponseEntity<?> delete(@Parameter(description = "Role id") @PathVariable Long id) {
     roleService.deleteRole(id);
     return new ResponseEntity<>(HttpStatus.OK);
