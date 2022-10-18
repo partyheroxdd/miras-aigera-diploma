@@ -20,23 +20,6 @@ services:
     networks:
       - backend
 
-#FrontEnd React App
-  app-client:
-    container_name: diploma-app-frontend
-    image: diploma-app-frontend
-    build:
-      context: final-app # Use an image built from the specified dockerfile in the `polling-app-client` directory.
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    restart: always
-    stdin_open: true
-    depends_on:
-      - app
-    networks:
-      - backend
-    command: npm start
-
 #Postgresql DataBase
   postgresqldb:
     image: postgres

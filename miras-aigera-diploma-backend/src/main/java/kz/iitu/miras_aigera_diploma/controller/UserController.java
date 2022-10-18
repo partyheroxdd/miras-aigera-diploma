@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDTO;
 import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDTO;
 import kz.iitu.miras_aigera_diploma.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,6 +46,17 @@ public class UserController {
       @Parameter(description = "User id") @PathVariable Long id) {
     userService.deleteUser(id);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping("/forgot")
+  public ResponseEntity<String> forgotPassword(
+      @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+    return ResponseEntity.ok(userService.forgotPassword(forgotPasswordRequestDTO));
+  }
+
+  @PostMapping("/validate")
+  public ResponseEntity<String> validateResetCode(@RequestParam String resetCode) {
+    return ResponseEntity.ok(userService.validateResetCode(resetCode));
   }
 
 }
