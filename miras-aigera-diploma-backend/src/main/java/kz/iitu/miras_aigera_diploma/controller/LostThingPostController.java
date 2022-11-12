@@ -41,20 +41,20 @@ public class LostThingPostController {
     return ResponseEntity.ok(lostThingPostService.saveLostThingPost(lostThingPostDto));
   }
 
-  @DeleteMapping(value = "/{id}")
+  @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete post with Id")
   public ResponseEntity<?> delete(@Parameter(description = "Post id") @PathVariable Long id) {
     lostThingPostService.deleteLostThingPost(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping(value = "/all")
+  @GetMapping("/all")
   @Operation(summary = "Method to get all posts")
   public ResponseEntity<List<LostThingPost>> getAll() {
     return ResponseEntity.ok(lostThingPostService.getAllLostThingPosts());
   }
 
-  @PostMapping(value = "/approve/{id}")
+  @PostMapping("/approve/{id}")
   @Operation(summary = "Approve post")
   public ResponseEntity<?> approve(@Parameter(description = "Post id") @PathVariable Long id,
       @Parameter(description = "approved status") @RequestParam boolean approved) {

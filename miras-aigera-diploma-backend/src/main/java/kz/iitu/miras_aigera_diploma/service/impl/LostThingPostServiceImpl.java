@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
@@ -21,6 +22,10 @@ public class LostThingPostServiceImpl implements LostThingPostService {
 
   @Override
   public LostThingPostDto saveLostThingPost(LostThingPostDto lostThingPostDto) {
+    if (lostThingPostRepository.existsByDateTimeBetween(lostThingPostDto.getDateTime(),
+        LocalDateTime.now())) {
+      throw new NotFoundException("Post is already exists", HttpStatus.BAD_REQUEST);
+    }
     LostThingPost lostThingPost = LostThingPost.builder()
         .city(lostThingPostDto.getCity())
         .district(lostThingPostDto.getDistrict())

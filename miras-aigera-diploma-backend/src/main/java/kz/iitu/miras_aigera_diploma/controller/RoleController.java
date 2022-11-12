@@ -39,14 +39,14 @@ public class RoleController {
     return ResponseEntity.ok(roleService.saveRole(role));
   }
 
-  @DeleteMapping(value = "/{id}")
+  @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete role by id")
   public ResponseEntity<?> delete(@Parameter(description = "Role id") @PathVariable Long id) {
     roleService.deleteRole(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping(value = "/all")
+  @GetMapping("/all")
   @Operation(summary = "Method to get all roles")
   public ResponseEntity<List<Role>> getAll() {
     return ResponseEntity.ok(roleService.getAllRoles());
