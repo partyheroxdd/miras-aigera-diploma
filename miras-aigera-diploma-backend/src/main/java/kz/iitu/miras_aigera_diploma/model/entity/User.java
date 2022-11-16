@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +31,6 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Size(min = 12, max = 12, message = "Username length must be 12")
   @Column(name = "username", unique = true, nullable = false)
   private String username;
 
@@ -48,11 +46,9 @@ public class User {
   @Column(name = "position")
   private String position;
 
-  @Size(min = 12, max = 12, message = "Phone Number Should Be Valid")
   @Column(name = "phone", unique = true, nullable = false)
   private String phone;
 
-  @Size(min = 8, message = "Password length must be minimum 8, maximum 40")
   @Column(name = "password")
   private String password;
 

@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public AccessToken register(UserRegisterDto userRegisterDto) {
-    if (!userRegisterDto.getUsername().matches("\\d+")) {
+    if (!userRegisterDto.getUsername().matches("^\\d{12}$")) {
       throw new CustomSecurityException(ApiMessages.INVALID_USERNAME, HttpStatus.BAD_REQUEST);
     }
     String username = null;

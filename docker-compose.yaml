@@ -20,7 +20,7 @@ services:
     networks:
       - backend
 
-#Postgresql DataBase
+  #Postgresql DataBase
   postgresqldb:
     image: postgres
     container_name: diploma-postgresql

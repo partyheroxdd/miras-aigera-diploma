@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final ForgotPasswordUserRepository forgotPasswordUserRepository;
   private static final long EXPIRE_RESET_CODE_TIME_MINUTE = 5;
+
   @Override
   public UserInfoDTO getUser(Long id) {
     User user = userRepository.findUserById(id);
@@ -74,7 +75,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public String validateResetCode(String resetCode) {
     ForgotPasswordUser forgotPasswordUser = forgotPasswordUserRepository.findByResetCode(resetCode);
-    if(isResetCodeExpired(forgotPasswordUser.getCreationTime())) {
+    if (isResetCodeExpired(forgotPasswordUser.getCreationTime())) {
       forgotPasswordUserRepository.delete(forgotPasswordUser);
       throw new RuntimeException();
     }

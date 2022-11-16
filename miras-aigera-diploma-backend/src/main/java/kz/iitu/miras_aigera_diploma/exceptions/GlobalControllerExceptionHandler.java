@@ -61,7 +61,7 @@ public class GlobalControllerExceptionHandler {
 
     ApiError apiError = new ApiError.
         Builder()
-        .withMessage("Some Error Occurred")
+        .withMessage(exception.getMessage())
         .withHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
         .withCreatedAt()
         .build();

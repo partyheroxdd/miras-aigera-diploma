@@ -1,0 +1,30 @@
+#DB
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lost-found-app
+    username: postgres
+    password: zxc
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+
+#JWT token
+security:
+  jwt:
+    token:
+      secret-key: mirasmadiyevandaigerimbexeit
+      expiration: 900000
+
+#Swagger
+springdoc:
+  api-docs:
+    path: /api/v1/api-docs
+
+#Server
+server:
+  port: 8080
+
+

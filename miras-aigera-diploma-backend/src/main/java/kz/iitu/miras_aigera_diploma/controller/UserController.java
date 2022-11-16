@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDTO;
 import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDTO;
 import kz.iitu.miras_aigera_diploma.service.UserService;
@@ -50,12 +51,12 @@ public class UserController {
 
   @PostMapping("/forgot")
   public ResponseEntity<String> forgotPassword(
-      @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+      @Valid @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
     return ResponseEntity.ok(userService.forgotPassword(forgotPasswordRequestDTO));
   }
 
   @PostMapping("/validate")
-  public ResponseEntity<String> validateResetCode(@RequestParam String resetCode) {
+  public ResponseEntity<String> validateResetCode(@Valid @RequestParam String resetCode) {
     return ResponseEntity.ok(userService.validateResetCode(resetCode));
   }
 

@@ -4,10 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.dto.LostThingPostDto;
-import kz.iitu.miras_aigera_diploma.model.entity.LostThingPost;
-import kz.iitu.miras_aigera_diploma.service.LostThingPostService;
+import kz.iitu.miras_aigera_diploma.model.dto.PostDto;
+import kz.iitu.miras_aigera_diploma.model.entity.Post;
+import kz.iitu.miras_aigera_diploma.service.PostService;
+import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,44 +25,54 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/lost-things-posts")
-@Tag(name = "LostThings", description = "Lost Things Posts API")
-public class LostThingPostController {
+@RequestMapping("/api/posts")
+@Tag(name = "Posts", description = "Posts API")
+public class PostController {
 
-  private final LostThingPostService lostThingPostService;
+  private final PostService postService;
 
   @GetMapping("/{id}")
   @Operation(summary = "Method to get post with Id")
-  public ResponseEntity<LostThingPostDto> getLostThingsPost(
+  public ResponseEntity<PostDto> getPost(
       @Parameter(description = "Post id") @PathVariable final Long id) {
-    return ResponseEntity.ok(lostThingPostService.getLostThingPost(id));
+    return ResponseEntity.ok(postService.getPost(id));
   }
 
   @PostMapping
   @Operation(summary = "Save new post")
-  public ResponseEntity<LostThingPostDto> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Post") @RequestBody LostThingPostDto lostThingPostDto) {
-    return ResponseEntity.ok(lostThingPostService.saveLostThingPost(lostThingPostDto));
+  public ResponseEntity<PostDto> save(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Post") @RequestBody PostDto postDto) {
+    return ResponseEntity.ok(postService.savePost(postDto));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete post with Id")
   public ResponseEntity<?> delete(@Parameter(description = "Post id") @PathVariable Long id) {
-    lostThingPostService.deleteLostThingPost(id);
+    postService.deletePost(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping("/all")
-  @Operation(summary = "Method to get all posts")
-  public ResponseEntity<List<LostThingPost>> getAll() {
-    return ResponseEntity.ok(lostThingPostService.getAllLostThingPosts());
+  @GetMapping("/approved")
+  @Operation(summary = "Method to get all approved posts")
+  public ResponseEntity<List<PostDto>> getAllApprovedPosts() {
+    return ResponseEntity.ok(postService.getAllApprovedPosts());
+  }
+
+  @GetMapping
+  @Operation(summary = "Method to get all paginated sorted posts")
+  public ResponseEntity<PageDTO<PostDto>> getAllPosts(@RequestParam(required = false) String city,
+      @RequestParam(required = false) String query,
+      @PageableDefault(
+          sort = {Post.Fields.id},
+          direction = Sort.Direction.ASC) Pageable pageable) {
+    return ResponseEntity.ok(postService.getAllPosts(city, query, pageable));
   }
 
   @PostMapping("/approve/{id}")
   @Operation(summary = "Approve post")
   public ResponseEntity<?> approve(@Parameter(description = "Post id") @PathVariable Long id,
       @Parameter(description = "approved status") @RequestParam boolean approved) {
-    lostThingPostService.approveLostThingsPost(id, approved);
+    postService.approvePost(id, approved);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

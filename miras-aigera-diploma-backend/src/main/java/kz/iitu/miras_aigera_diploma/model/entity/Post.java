@@ -1,18 +1,20 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,8 +24,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @Entity
 @Builder
-@Table(name = "lost_peoples_posts")
-public class LostPeoplePost {
+@Table(name = "posts")
+@FieldNameConstants
+public class Post {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,34 +39,28 @@ public class LostPeoplePost {
   private String district;
 
   @Column(name = "datetime")
+  @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
   private LocalDateTime dateTime;
 
-  @Column(name = "fullname")
-  private String fullName;
+  @ManyToOne
+  private PostCategory postCategory;
 
-  @Column(name = "birthday")
-  private LocalDate birthday;
+  @Column(name = "description")
+  private String description;
 
-  @Column(name = "identity_data")
-  private String identityData;
-
-  @Column(name = "place_of_residence")
-  private String placeOfResidence;
-
-  @Column(name = "type_of_activity")
-  private String typeOfActivity;
-
-  @Column(name = "image_url")
-  private String imageUrl;
+  @Column(name = "details")
+  private String details;
 
   @Column(name = "approved")
   private boolean approved;
 
   @CreationTimestamp
   @Column(name = "created_at")
+  @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
   private LocalDateTime createdAt;
 
   @UpdateTimestamp
   @Column(name = "updated_at")
+  @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
   private LocalDateTime updatedAt;
 }
