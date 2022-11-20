@@ -2,11 +2,11 @@ package kz.iitu.miras_aigera_diploma.converter;
 
 import kz.iitu.miras_aigera_diploma.model.dto.PostDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
-import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractVlifeConverter;
+import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PostConverter extends AbstractVlifeConverter<Post, PostDto> {
+public class PostConverter extends AbstractConverter<Post, PostDto> {
 
   @Override
   public void fill(Post source, PostDto target) {
