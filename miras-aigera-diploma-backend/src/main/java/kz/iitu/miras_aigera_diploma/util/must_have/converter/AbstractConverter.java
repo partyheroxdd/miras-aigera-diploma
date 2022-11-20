@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
-public abstract class AbstractConverter<S, T> implements Converter<S, T>, Filler<S, T> {
+public abstract class AbstractConverter<S, T> implements Converter<S, T>, Filter<S, T> {
 
 
   @Override
