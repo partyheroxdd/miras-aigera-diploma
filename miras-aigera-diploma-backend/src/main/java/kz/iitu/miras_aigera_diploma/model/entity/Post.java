@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +26,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Builder
 @Table(name = "posts")
+@Accessors(chain = true)
 @FieldNameConstants
 public class Post {
 

@@ -16,7 +16,7 @@ security:
   jwt:
     token:
       secret-key: mirasmadiyevandaigerimbexeit
-      expiration: 900000
+      expiration: 3600000
 
 #Swagger
 springdoc:
@@ -30,5 +30,10 @@ springdoc:
 #Server
 server:
   port: 8080
+
+#Application
+application:
+  title: Lost found service application
+  version: v1.0
 
 

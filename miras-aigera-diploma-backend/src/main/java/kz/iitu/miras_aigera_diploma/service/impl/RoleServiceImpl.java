@@ -1,6 +1,7 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.List;
+import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
@@ -30,12 +31,9 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public Role getRole(Long id) {
-
-    Role role = roleRepository.findById(id).orElse(null);
-    if (role != null) {
-      log.info("Getting role {} with id {}", role.getName(), id);
-    }
-
+    Role role = roleRepository.findById(id).orElseThrow(() -> new NotFoundException(
+        ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
+    log.info("Getting role {} with id {}", role.getName(), id);
     return role;
   }
 

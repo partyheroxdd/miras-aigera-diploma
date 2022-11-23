@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
 import kz.iitu.miras_aigera_diploma.model.dto.PostInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.PostUpdateDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,8 +43,15 @@ public class PostController {
   @PostMapping
   @Operation(summary = "Save new post")
   public ResponseEntity<PostCreateDto> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Post") @RequestBody PostCreateDto postCreateDto) {
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of PostCreateDto") @RequestBody PostCreateDto postCreateDto) {
     return ResponseEntity.ok(postService.savePost(postCreateDto));
+  }
+
+  @PutMapping()
+  @Operation(summary = "Method to update post")
+  public ResponseEntity<PostUpdateDto> updatePost(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of PostUpdateDto") @RequestBody PostUpdateDto postUpdateDto) {
+    return ResponseEntity.ok(postService.updatePost(postUpdateDto));
   }
 
   @DeleteMapping("/{id}")
@@ -56,9 +65,12 @@ public class PostController {
   @GetMapping
   @Operation(summary = "Method to get all paginated sorted posts")
   public ResponseEntity<PageDTO<PostInfoDto>> getAllPosts(
-      @Parameter(description = "City filter", example = "Almaty") @RequestParam(required = false) String city,
-      @Parameter(description = "Approved filter", example = "false") @RequestParam(required = false) Boolean approved,
-      @Parameter(description = "Query search", example = "IPhone") @RequestParam(required = false) String query,
+      @Parameter(description = "City filter", example = "Almaty") @RequestParam(required = false) String
+          city,
+      @Parameter(description = "Approved filter", example = "false") @RequestParam(required = false) Boolean
+          approved,
+      @Parameter(description = "Query search", example = "IPhone") @RequestParam(required = false) String
+          query,
       @PageableDefault(
           sort = {Post.Fields.id},
           direction = Sort.Direction.ASC) Pageable pageable) {

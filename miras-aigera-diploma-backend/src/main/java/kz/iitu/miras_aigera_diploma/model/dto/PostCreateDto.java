@@ -27,6 +27,7 @@ public class PostCreateDto {
   @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
   private LocalDateTime dateTime;
 
+  @Schema(description = "Post category name", example = "lost thing", required = true)
   private String postCategory;
 
   @Schema(description = "Post publish description", example = "White red color")

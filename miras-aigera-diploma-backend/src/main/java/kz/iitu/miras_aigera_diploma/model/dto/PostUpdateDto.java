@@ -14,8 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO for posts info")
-public class PostInfoDto {
+@Schema(description = "DTO for update posts")
+public class PostUpdateDto {
 
   @Schema(description = "Post publish id", example = "1")
   private Long id;
@@ -38,8 +38,4 @@ public class PostInfoDto {
 
   @Schema(description = "Post publish details", example = "On the Tole bi street")
   private String details;
-
-  @Schema(description = "Post approve detail", example = "false")
-  private Boolean approved;
-
 }
