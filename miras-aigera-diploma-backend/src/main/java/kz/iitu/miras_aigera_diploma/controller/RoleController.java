@@ -28,7 +28,7 @@ public class RoleController {
   @GetMapping("/{id}")
   @Operation(summary = "Method to get role with Id")
   public ResponseEntity<Role> getRole(
-      @Parameter(description = "Role id") @PathVariable final Long id) {
+      @Parameter(description = "Role id", example = "1", required = true) @PathVariable final Long id) {
     return ResponseEntity.ok(roleService.getRole(id));
   }
 
@@ -41,7 +41,8 @@ public class RoleController {
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete role by id")
-  public ResponseEntity<?> delete(@Parameter(description = "Role id") @PathVariable Long id) {
+  public ResponseEntity<?> delete(
+      @Parameter(description = "Role id", example = "1", required = true) @PathVariable Long id) {
     roleService.deleteRole(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }

@@ -1,6 +1,6 @@
 package kz.iitu.miras_aigera_diploma.util.must_have.converter;
 
-public interface VlifeFiller<S, T> {
+public interface Filler<S, T> {
 
   /**
    * Маппит значения из source в target

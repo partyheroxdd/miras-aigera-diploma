@@ -3,18 +3,16 @@ package kz.iitu.miras_aigera_diploma.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Schema(description = "DTO for validate reset code")
-public class ValidateResetCodeDTO {
+@Schema(description = "DTO for forgot password request")
+public class ForgotPasswordRequestDto {
 
-  @Schema(description = "User's reset code", example = "2534")
+  @Schema(description = "User's email", example = "miras.madiev15@gmail.com")
   @NotBlank
-  private String resetCode;
+  private String email;
 }

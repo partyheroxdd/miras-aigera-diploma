@@ -3,8 +3,8 @@ package kz.iitu.miras_aigera_diploma.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.dto.PostDto;
+import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
+import kz.iitu.miras_aigera_diploma.model.dto.PostInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
@@ -33,45 +33,43 @@ public class PostController {
 
   @GetMapping("/{id}")
   @Operation(summary = "Method to get post with Id")
-  public ResponseEntity<PostDto> getPost(
-      @Parameter(description = "Post id") @PathVariable final Long id) {
+  public ResponseEntity<PostInfoDto> getPost(
+      @Parameter(description = "Post id", example = "1", required = true) @PathVariable final Long id) {
     return ResponseEntity.ok(postService.getPost(id));
   }
 
   @PostMapping
   @Operation(summary = "Save new post")
-  public ResponseEntity<PostDto> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Post") @RequestBody PostDto postDto) {
-    return ResponseEntity.ok(postService.savePost(postDto));
+  public ResponseEntity<PostCreateDto> save(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Post") @RequestBody PostCreateDto postCreateDto) {
+    return ResponseEntity.ok(postService.savePost(postCreateDto));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete post with Id")
-  public ResponseEntity<?> delete(@Parameter(description = "Post id") @PathVariable Long id) {
+  public ResponseEntity<?> delete(
+      @Parameter(description = "Post id", example = "1", required = true) @PathVariable Long id) {
     postService.deletePost(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping("/approved")
-  @Operation(summary = "Method to get all approved posts")
-  public ResponseEntity<List<PostDto>> getAllApprovedPosts() {
-    return ResponseEntity.ok(postService.getAllApprovedPosts());
-  }
-
   @GetMapping
   @Operation(summary = "Method to get all paginated sorted posts")
-  public ResponseEntity<PageDTO<PostDto>> getAllPosts(@RequestParam(required = false) String city,
-      @RequestParam(required = false) String query,
+  public ResponseEntity<PageDTO<PostInfoDto>> getAllPosts(
+      @Parameter(description = "City filter", example = "Almaty") @RequestParam(required = false) String city,
+      @Parameter(description = "Approved filter", example = "false") @RequestParam(required = false) Boolean approved,
+      @Parameter(description = "Query search", example = "IPhone") @RequestParam(required = false) String query,
       @PageableDefault(
           sort = {Post.Fields.id},
           direction = Sort.Direction.ASC) Pageable pageable) {
-    return ResponseEntity.ok(postService.getAllPosts(city, query, pageable));
+    return ResponseEntity.ok(postService.getAllPosts(city, approved, query, pageable));
   }
 
   @PostMapping("/approve/{id}")
   @Operation(summary = "Approve post")
-  public ResponseEntity<?> approve(@Parameter(description = "Post id") @PathVariable Long id,
-      @Parameter(description = "approved status") @RequestParam boolean approved) {
+  public ResponseEntity<?> approve(
+      @Parameter(description = "Post id", example = "1", required = true) @PathVariable Long id,
+      @Parameter(description = "approved status", example = "false", required = true) @RequestParam boolean approved) {
     postService.approvePost(id, approved);
     return new ResponseEntity<>(HttpStatus.OK);
   }

@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDTO;
+import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public void changePassword(UserChangePasswordDTO userChangePasswordDTO) {
+  public void changePassword(UserChangePasswordDto userChangePasswordDTO) {
     User user = userRepository.findByUsername(userChangePasswordDTO.getUsername()).orElseThrow(
         () -> new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST));
     log.info("Find user {} to change password", user.getUsername());

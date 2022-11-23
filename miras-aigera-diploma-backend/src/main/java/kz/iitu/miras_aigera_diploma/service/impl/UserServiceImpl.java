@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDTO;
-import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDTO;
+import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDto;
+import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.ForgotPasswordUser;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.ForgotPasswordUserRepository;
@@ -21,15 +21,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
+  private static final long EXPIRE_RESET_CODE_TIME_MINUTE = 5;
   private final UserRepository userRepository;
   private final ForgotPasswordUserRepository forgotPasswordUserRepository;
-  private static final long EXPIRE_RESET_CODE_TIME_MINUTE = 5;
 
   @Override
-  public UserInfoDTO getUser(Long id) {
+  public UserInfoDto getUser(Long id) {
     User user = userRepository.findUserById(id);
     log.info("Get user with id {}", id);
-    return UserInfoDTO.builder()
+    return UserInfoDto.builder()
         .id(user.getId())
         .username(user.getUsername())
         .fullName(user.getFullName())
@@ -45,22 +45,22 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserInfoDTO> getAllUsers() {
+  public List<UserInfoDto> getAllUsers() {
     List<User> users = userRepository.findAll();
-    List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
-    users.forEach(user -> userInfoDTOList.add(UserInfoDTO.builder()
+    List<UserInfoDto> userInfoDtoList = new ArrayList<>();
+    users.forEach(user -> userInfoDtoList.add(UserInfoDto.builder()
         .id(user.getId())
         .username(user.getUsername())
         .fullName(user.getFullName())
         .address(user.getAddress())
         .phone(user.getPhone())
         .build()));
-    return userInfoDTOList;
+    return userInfoDtoList;
   }
 
   @Override
   public String forgotPassword(
-      ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+      ForgotPasswordRequestDto forgotPasswordRequestDTO) {
     ForgotPasswordUser forgotPasswordUser = ForgotPasswordUser.builder()
         .email(forgotPasswordRequestDTO.getEmail())
         .resetCode(generateResetCode())

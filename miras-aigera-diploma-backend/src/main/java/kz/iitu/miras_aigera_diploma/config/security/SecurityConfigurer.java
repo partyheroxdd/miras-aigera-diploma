@@ -40,7 +40,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/auth/**").permitAll()
         .antMatchers("/api/roles/**").access("hasRole('ROLE_ADMIN')")
         .antMatchers("/api/users/**").access("hasRole('ROLE_ADMIN')")
-        .antMatchers("/api/lost-things-posts/approve/**")
+        .antMatchers("/api/posts/approve/**")
         .access("hasAnyRole('ROLE_ADMIN', 'ROLE_POLICEMAN')")
         .anyRequest().authenticated();
     http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -56,7 +56,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/swagger-ui/**", "/api/v1/api-docs");
+    web.ignoring().antMatchers("/swagger-ui/**", "/api/v1/api-docs/**");
   }
 
 

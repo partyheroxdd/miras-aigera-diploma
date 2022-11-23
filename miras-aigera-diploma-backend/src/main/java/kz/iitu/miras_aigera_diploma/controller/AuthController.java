@@ -3,7 +3,7 @@ package kz.iitu.miras_aigera_diploma.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDTO;
+import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
@@ -46,7 +46,7 @@ public class AuthController {
   @Operation(summary = "Method to change password")
   public ResponseEntity<?> changePassword(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request body of User Change Password DTO")
-      @Valid @RequestBody UserChangePasswordDTO userChangePasswordDTO) {
+      @Valid @RequestBody UserChangePasswordDto userChangePasswordDTO) {
     authService.changePassword(userChangePasswordDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }

@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
-import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDTO;
-import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDTO;
+import kz.iitu.miras_aigera_diploma.model.dto.ForgotPasswordRequestDto;
+import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDto;
 import kz.iitu.miras_aigera_diploma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,28 +30,28 @@ public class UserController {
 
   @GetMapping("/all")
   @Operation(summary = "Method to get all users")
-  public ResponseEntity<List<UserInfoDTO>> getAllUsers() {
+  public ResponseEntity<List<UserInfoDto>> getAllUsers() {
     return ResponseEntity.ok(userService.getAllUsers());
   }
 
   @GetMapping("/{id}")
   @Operation(summary = "Method to get user by id")
-  public ResponseEntity<UserInfoDTO> getUser(
-      @Parameter(description = "User id") @PathVariable Long id) {
+  public ResponseEntity<UserInfoDto> getUser(
+      @Parameter(description = "User id", example = "1", required = true) @PathVariable Long id) {
     return ResponseEntity.ok(userService.getUser(id));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Method to delete user by id")
   public ResponseEntity<?> deleteUser(
-      @Parameter(description = "User id") @PathVariable Long id) {
+      @Parameter(description = "User id", example = "1", required = true) @PathVariable Long id) {
     userService.deleteUser(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping("/forgot")
   public ResponseEntity<String> forgotPassword(
-      @Valid @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+      @Valid @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDTO) {
     return ResponseEntity.ok(userService.forgotPassword(forgotPasswordRequestDTO));
   }
 

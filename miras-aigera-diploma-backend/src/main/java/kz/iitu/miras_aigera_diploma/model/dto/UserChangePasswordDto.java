@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "DTO for change password request")
-public class UserChangePasswordDTO {
+public class UserChangePasswordDto {
 
   @Schema(description = "User's username", example = "020501550651")
   @NotBlank

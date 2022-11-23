@@ -19,14 +19,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements ITokenProvider {
 
+  private final IJwtTokenHelper tokenHelper;
+  private final UserDetailsService userDetailsService;
   @Value("${security.jwt.token.secret-key}")
   private String secretKeyValue;
   @Value("${security.jwt.token.expiration}")
   private long expiration;
-
-  private final IJwtTokenHelper tokenHelper;
-
-  private final UserDetailsService userDetailsService;
 
   @Override
   public AccessToken createToken(String username, Set<Role> roles) {

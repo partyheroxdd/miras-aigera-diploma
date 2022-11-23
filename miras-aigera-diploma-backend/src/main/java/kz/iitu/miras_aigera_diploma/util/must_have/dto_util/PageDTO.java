@@ -17,6 +17,13 @@ public class PageDTO<T> {
     this.content = new ArrayList();
   }
 
+  public PageDTO(Long total, Integer pageNumber, Integer totalPages, List<T> content) {
+    this.total = total;
+    this.pageNumber = pageNumber;
+    this.totalPages = totalPages;
+    this.content = content;
+  }
+
   public static <T> PageDTO<T> empty() {
     return new PageDTO();
   }
@@ -25,38 +32,31 @@ public class PageDTO<T> {
     return this.total;
   }
 
-  public Integer getPageNumber() {
-    return this.pageNumber;
-  }
-
-  public Integer getTotalPages() {
-    return this.totalPages;
-  }
-
-  public List<T> getContent() {
-    return this.content;
-  }
-
   public void setTotal(Long total) {
     this.total = total;
+  }
+
+  public Integer getPageNumber() {
+    return this.pageNumber;
   }
 
   public void setPageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
   }
 
+  public Integer getTotalPages() {
+    return this.totalPages;
+  }
+
   public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
   }
 
-  public void setContent(List<T> content) {
-    this.content = content;
+  public List<T> getContent() {
+    return this.content;
   }
 
-  public PageDTO(Long total, Integer pageNumber, Integer totalPages, List<T> content) {
-    this.total = total;
-    this.pageNumber = pageNumber;
-    this.totalPages = totalPages;
+  public void setContent(List<T> content) {
     this.content = content;
   }
 }

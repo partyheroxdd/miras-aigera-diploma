@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
-public abstract class AbstractVlifeConverter<S, T> implements Converter<S, T>, VlifeFiller<S, T> {
+public abstract class AbstractConverter<S, T> implements Converter<S, T>, Filler<S, T> {
 
 
   @Override
@@ -26,7 +26,8 @@ public abstract class AbstractVlifeConverter<S, T> implements Converter<S, T>, V
             .getActualTypeArguments()[1];
     try {
       return clazz.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+             NoSuchMethodException e) {
       throw new IllegalStateException(String.format("Не удалось создать экземпляр класса %s, " +
           "возможно не был задан конструктор без параметров", clazz.getName()), e);
     }

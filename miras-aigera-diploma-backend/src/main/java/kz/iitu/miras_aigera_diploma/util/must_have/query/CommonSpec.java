@@ -6,6 +6,10 @@ import org.springframework.lang.Nullable;
 
 public final class CommonSpec {
 
+  private CommonSpec() {
+    throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+  }
+
   public static <T> Specification<T> search(@Nullable String query, @Nullable String... fields) {
     if (fields != null && fields.length >= 1) {
       SpecificationBuilder<T> output = new SpecificationBuilder();
@@ -26,9 +30,5 @@ public final class CommonSpec {
     } else {
       throw new IllegalArgumentException("'fields' parameter can not be null or empty");
     }
-  }
-
-  private CommonSpec() {
-    throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
   }
 }

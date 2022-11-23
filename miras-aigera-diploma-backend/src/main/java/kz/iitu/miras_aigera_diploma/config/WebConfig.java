@@ -1,6 +1,7 @@
 package kz.iitu.miras_aigera_diploma.config;
 
 import java.util.Arrays;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -17,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
   public CorsConfigurationSource corsConfigurationSource() {
     final CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+    config.setAllowedOrigins(List.of("http://localhost:3000"));
     config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
     config.setAllowCredentials(true);
     config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));

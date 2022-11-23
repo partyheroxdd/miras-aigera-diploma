@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ForgotPasswordUserRepository extends JpaRepository<ForgotPasswordUser, Long> {
 
-  public ForgotPasswordUser findByResetCode(String resetCode);
+  ForgotPasswordUser findByResetCode(String resetCode);
 }

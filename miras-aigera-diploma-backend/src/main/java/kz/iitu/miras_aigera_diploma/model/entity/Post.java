@@ -52,7 +52,7 @@ public class Post {
   private String details;
 
   @Column(name = "approved")
-  private boolean approved;
+  private Boolean approved;
 
   @CreationTimestamp
   @Column(name = "created_at")
