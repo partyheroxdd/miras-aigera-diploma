@@ -1,15 +1,15 @@
 package kz.iitu.miras_aigera_diploma.service;
 
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.entity.Role;
+import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
 
 public interface RoleService {
 
-  Role saveRole(Role role);
+  RoleDto saveRole(RoleDto roleDto);
 
-  Role getRole(Long id);
+  RoleDto getRole(Long id);
 
   void deleteRole(Long id);
 
-  List<Role> getAllRoles();
+  List<RoleDto> getAllRoles();
 }

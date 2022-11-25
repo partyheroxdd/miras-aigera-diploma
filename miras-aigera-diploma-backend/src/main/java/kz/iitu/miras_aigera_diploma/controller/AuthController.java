@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +51,12 @@ public class AuthController {
       @Valid @RequestBody UserChangePasswordDto userChangePasswordDTO) {
     authService.changePassword(userChangePasswordDTO);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping("/me")
+  @Operation(summary = "Method to get my credentials")
+  public ResponseEntity<UserMeInfoDto> getMe() {
+    return ResponseEntity.ok(authService.getMe());
   }
 
 }

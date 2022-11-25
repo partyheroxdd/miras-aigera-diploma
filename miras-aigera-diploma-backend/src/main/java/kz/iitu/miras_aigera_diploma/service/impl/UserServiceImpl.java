@@ -12,6 +12,7 @@ import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.ForgotPasswordUserRepository;
 import kz.iitu.miras_aigera_diploma.repository.UserRepository;
 import kz.iitu.miras_aigera_diploma.service.UserService;
+import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserInfoDto getUser(Long id) {
     User user = userRepository.findUserById(id);
-    log.info("Get user with id {}", id);
+    log.info("Get user {}", user);
     return UserInfoDto.builder()
         .id(user.getId())
         .username(user.getUsername())

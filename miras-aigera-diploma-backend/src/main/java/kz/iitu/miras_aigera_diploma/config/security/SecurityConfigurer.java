@@ -37,7 +37,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     http.
         authorizeRequests()
-        .antMatchers("/api/auth/**").permitAll()
         .antMatchers("/api/roles/**").access("hasRole('ROLE_ADMIN')")
         .antMatchers("/api/users/**").access("hasRole('ROLE_ADMIN')")
         .antMatchers("/api/posts/approve/**")
@@ -56,7 +55,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/swagger-ui/**", "/api/v1/api-docs/**");
+    web.ignoring().antMatchers("/swagger-ui/**", "/api/v1/api-docs/**", "/api/auth/register",
+        "/api/auth/login", "/api/auth/password");
   }
 
 

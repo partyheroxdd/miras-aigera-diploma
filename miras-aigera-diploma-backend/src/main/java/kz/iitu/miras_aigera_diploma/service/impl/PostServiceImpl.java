@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
   public PostCreateDto savePost(PostCreateDto postCreateDto) {
     Post post = postCreateDtoConverter.convert(postCreateDto);
     postRepository.save(post);
-    log.info("Post with id {} saved", post.getId());
+    log.info("Post {} saved", post);
     return postCreateDto;
   }
 
@@ -63,7 +63,7 @@ public class PostServiceImpl implements PostService {
         .setDescription(postUpdateDto.getDescription())
         .setDetails(postUpdateDto.getDetails());
     postRepository.save(post);
-    log.info("Updating post with id {}", postUpdateDto.getId());
+    log.info("Post updated to {}", post);
     return postUpdateDto;
   }
 
@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
     Post post = postRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(
             ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    log.info("Getting post with id {}", id);
+    log.info("Getting post {}", post);
     return postInfoDtoConverter.convert(post);
   }
 
@@ -92,7 +92,7 @@ public class PostServiceImpl implements PostService {
             ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
     post.setApproved(approved);
     postRepository.save(post);
-    log.info("Post approve status {}", approved);
+    log.info("Post approve status {}", post);
   }
 
   @Override

@@ -1,6 +1,5 @@
 package kz.iitu.miras_aigera_diploma.converter;
 
-import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
 import kz.iitu.miras_aigera_diploma.model.dto.PostInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;

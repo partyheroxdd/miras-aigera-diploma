@@ -1,9 +1,11 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.List;
+import kz.iitu.miras_aigera_diploma.converter.RoleDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
+import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
@@ -18,23 +20,26 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl implements RoleService {
 
   private final RoleRepository roleRepository;
+  private final RoleDtoConverter roleDtoConverter;
 
   @Override
-  public Role saveRole(Role role) {
-    if (!role.getName().startsWith("ROLE_")) {
+  public RoleDto saveRole(RoleDto roleDto) {
+    if (!roleDto.getName().startsWith("ROLE_")) {
       throw new CustomSecurityException(ApiMessages.INVALID_ROLE_NAME, HttpStatus.BAD_REQUEST);
     }
-    Role saveRole = roleRepository.save(role);
-    log.info("Saving role {}", saveRole.getName());
-    return saveRole;
+    Role role = Role.builder()
+        .name(roleDto.getName()).build();
+    roleRepository.save(role);
+    log.info("Saving role {}", role);
+    return roleDto;
   }
 
   @Override
-  public Role getRole(Long id) {
+  public RoleDto getRole(Long id) {
     Role role = roleRepository.findById(id).orElseThrow(() -> new NotFoundException(
         ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    log.info("Getting role {} with id {}", role.getName(), id);
-    return role;
+    log.info("Getting role {}", role);
+    return roleDtoConverter.convert(role);
   }
 
   @Override
@@ -44,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public List<Role> getAllRoles() {
-    return roleRepository.findAll();
+  public List<RoleDto> getAllRoles() {
+    return roleDtoConverter.convert(roleRepository.findAll());
   }
 }

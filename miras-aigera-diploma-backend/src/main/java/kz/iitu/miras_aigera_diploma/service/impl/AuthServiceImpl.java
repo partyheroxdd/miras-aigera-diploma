@@ -3,10 +3,12 @@ package kz.iitu.miras_aigera_diploma.service.impl;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import kz.iitu.miras_aigera_diploma.converter.UserMeInfoDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
 import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
@@ -15,6 +17,7 @@ import kz.iitu.miras_aigera_diploma.repository.UserRepository;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.security.ITokenProvider;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
+import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,8 @@ public class AuthServiceImpl implements AuthService {
 
   private final AuthenticationManager authenticationManager;
 
+  private final UserMeInfoDtoConverter userMeInfoDtoConverter;
+
   @Override
   public AccessToken register(UserRegisterDto userRegisterDto) {
     if (!userRegisterDto.getUsername().matches("^\\d{12}$")) {
@@ -64,8 +69,7 @@ public class AuthServiceImpl implements AuthService {
       username = user.getUsername();
       roles = user.getRoles();
       userRepository.save(user);
-      log.info("User {} successfully registered with role {}", userRegisterDto.getUsername(),
-          userRegisterDto.getRoles());
+      log.info("User {} successfully registered", user);
     } catch (Exception e) {
       log.error(e.getMessage());
     }
@@ -122,5 +126,11 @@ public class AuthServiceImpl implements AuthService {
     user.setPassword(passwordEncoder.encode(userChangePasswordDTO.getReTypedPassword()));
 
     userRepository.save(user);
+  }
+
+  @Override
+  public UserMeInfoDto getMe() {
+    User user = userRepository.getUserByUsername(JwtUtil.getUsername());
+    return userMeInfoDtoConverter.convert(user);
   }
 }

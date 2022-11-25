@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,16 @@ public class RoleController {
 
   @GetMapping("/{id}")
   @Operation(summary = "Method to get role with Id")
-  public ResponseEntity<Role> getRole(
+  public ResponseEntity<RoleDto> getRole(
       @Parameter(description = "Role id", example = "1", required = true) @PathVariable final Long id) {
     return ResponseEntity.ok(roleService.getRole(id));
   }
 
   @PostMapping
   @Operation(summary = "Save new role")
-  public ResponseEntity<Role> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Role") @RequestBody Role role) {
-    return ResponseEntity.ok(roleService.saveRole(role));
+  public ResponseEntity<RoleDto> save(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Role") @RequestBody RoleDto roleDto) {
+    return ResponseEntity.ok(roleService.saveRole(roleDto));
   }
 
   @DeleteMapping("/{id}")
@@ -49,7 +50,7 @@ public class RoleController {
 
   @GetMapping("/all")
   @Operation(summary = "Method to get all roles")
-  public ResponseEntity<List<Role>> getAll() {
+  public ResponseEntity<List<RoleDto>> getAll() {
     return ResponseEntity.ok(roleService.getAllRoles());
   }
 }
