@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import kz.iitu.miras_aigera_diploma.converter.UserMeInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
@@ -130,7 +131,8 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public UserMeInfoDto getMe() {
-    User user = userRepository.getUserByUsername(JwtUtil.getUsername());
+    User user = userRepository.findByUsername(JwtUtil.getUsername()).orElseThrow(
+        () -> new NotFoundException(ApiMessages.USER_NOT_FOUND, HttpStatus.BAD_REQUEST));
     return userMeInfoDtoConverter.convert(user);
   }
 }

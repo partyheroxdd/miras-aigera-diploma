@@ -9,4 +9,5 @@ public class ApiMessages {
   public static final String INVALID_ROLE_NAME = "User's role must be start with [ROLE_]";
   public static final String ID_NOT_FOUND = "No records with such an id";
   public static final String POST_CATEGORY_NOT_FOUND = "No record with such post category";
+  public static final String USER_NOT_FOUND = "User with this username not found";
 }
