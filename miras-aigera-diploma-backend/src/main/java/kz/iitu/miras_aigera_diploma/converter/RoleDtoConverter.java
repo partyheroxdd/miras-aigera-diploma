@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoleDtoConverter extends AbstractConverter<Role, RoleDto> {
+
   @Override
   public void fill(Role source, RoleDto target) {
     target.setId(source.getId());

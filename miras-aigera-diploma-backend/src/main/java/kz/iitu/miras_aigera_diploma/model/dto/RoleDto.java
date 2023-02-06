@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Schema(description = "DTO for role info")
 public class RoleDto {
+
   @Schema(description = "Role's id", example = "1")
   private Long id;
 

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
-@Tag(name = "Posts", description = "Posts API")
+@Tag(name = "Posts API", description = "Methods for work with posts")
 public class PostController {
 
   private final PostService postService;

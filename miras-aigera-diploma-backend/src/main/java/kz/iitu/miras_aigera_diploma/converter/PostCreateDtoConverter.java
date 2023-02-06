@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class PostCreateDtoConverter extends AbstractConverter<PostCreateDto, Post> {
 
   private final PostCategoryRepository postCategoryRepository;
+
   @Override
   public void fill(PostCreateDto source, Post target) {
     target.setCity(source.getCity());

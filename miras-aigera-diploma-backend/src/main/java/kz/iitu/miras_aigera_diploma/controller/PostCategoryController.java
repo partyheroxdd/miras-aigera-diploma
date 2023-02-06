@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post_categories")
-@Tag(name = "Post categories", description = "Post categories API")
+@Tag(name = "Post categories API", description = "Methods to works with post categories")
 public class PostCategoryController {
 
   private final PostCategoryService postCategoryService;

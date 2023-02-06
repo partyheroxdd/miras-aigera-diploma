@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMeInfoDtoConverter extends AbstractConverter<User, UserMeInfoDto> {
+
   @Override
   public void fill(User source, UserMeInfoDto target) {
     target.setId(source.getId());

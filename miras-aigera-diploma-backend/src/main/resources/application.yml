@@ -6,10 +6,15 @@ spring:
     password: zxc
     driver-class-name: org.postgresql.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-
-
+    open-in-view: false
+    show-sql: false
+  flyway:
+    baselineOnMigrate: true
+    enabled: true
+    schemas: public
 
 #JWT token
 security:
@@ -26,10 +31,28 @@ springdoc:
     url: /api/v1/api-docs
   api-docs:
     path: /api/v1/api-docs
+    version: openapi_3_0
 
+#Actuator
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: 'health, prometheus, info, env, beans'
+    jmx:
+      exposure:
+        include: 'health, prometheus, info, env, beans'
+  endpoint:
+    metrics:
+      enabled: true
 #Server
 server:
   port: 8080
+  compression:
+    enabled: true
 
 #Application
 application:

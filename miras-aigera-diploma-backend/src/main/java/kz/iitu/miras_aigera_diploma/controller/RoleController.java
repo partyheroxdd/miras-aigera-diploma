@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
-import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/roles")
-@Tag(name = "Roles", description = "Roles API")
+@Tag(name = "Roles API", description = "Methods for work with roles")
 public class RoleController {
 
   private final RoleService roleService;

@@ -1,4 +1,4 @@
-package kz.iitu.miras_aigera_diploma.config.bean;
+package kz.iitu.miras_aigera_diploma.config.security;
 
 import kz.iitu.miras_aigera_diploma.service.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
