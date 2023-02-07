@@ -1,6 +1,5 @@
-package kz.iitu.miras_aigera_diploma.converter;
+package kz.iitu.miras_aigera_diploma.model.dto.user;
 
-import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;
 import org.springframework.stereotype.Component;

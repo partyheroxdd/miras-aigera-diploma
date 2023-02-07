@@ -2,15 +2,15 @@ package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.List;
 import java.util.Objects;
-import kz.iitu.miras_aigera_diploma.converter.PostCreateDtoConverter;
-import kz.iitu.miras_aigera_diploma.converter.PostInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.converter.post.PostCreateDtoConverter;
+import kz.iitu.miras_aigera_diploma.converter.post.PostInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.converter.post.PostUpdateDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
-import kz.iitu.miras_aigera_diploma.model.dto.PostInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.PostUpdateDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostCreateDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostUpdateDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
-import kz.iitu.miras_aigera_diploma.repository.PostCategoryRepository;
 import kz.iitu.miras_aigera_diploma.repository.PostRepository;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.util.PostSpec;
@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
   private final PostRepository postRepository;
   private final PostInfoDtoConverter postInfoDtoConverter;
   private final PostCreateDtoConverter postCreateDtoConverter;
-  private final PostCategoryRepository postCategoryRepository;
+  private final PostUpdateDtoConverter postUpdateDtoConverter;
 
   private final List<String> POST_SEARCH_FIELDS = List.of(
       Post.Fields.details,
@@ -54,14 +54,8 @@ public class PostServiceImpl implements PostService {
   public PostUpdateDto updatePost(PostUpdateDto postUpdateDto) {
     Post post = postRepository.findById(postUpdateDto.getId())
         .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    post.setCity(postUpdateDto.getCity())
-        .setDistrict(postUpdateDto.getDistrict())
-        .setDateTime(postUpdateDto.getDateTime())
-        .setPostCategory(postCategoryRepository.findByName(
-            postUpdateDto.getPostCategory()))
-        .setDescription(postUpdateDto.getDescription())
-        .setDetails(postUpdateDto.getDetails());
+            ApiMessages.ID_NOT_FOUND, HttpStatus.BAD_REQUEST));
+    postUpdateDtoConverter.fill(postUpdateDto, post);
     postRepository.save(post);
     log.info("Post updated to {}", post);
     return postUpdateDto;
@@ -71,7 +65,7 @@ public class PostServiceImpl implements PostService {
   public PostInfoDto getPost(Long id) {
     Post post = postRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
+            ApiMessages.ID_NOT_FOUND, HttpStatus.BAD_REQUEST));
     log.info("Getting post {}", post);
     return postInfoDtoConverter.convert(post);
   }
@@ -80,7 +74,7 @@ public class PostServiceImpl implements PostService {
   public void deletePost(Long id) {
     Post post = postRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
+            ApiMessages.ID_NOT_FOUND, HttpStatus.BAD_REQUEST));
     postRepository.delete(post);
     log.info("Lost Thing Post with id {} deleted", id);
   }
@@ -89,7 +83,7 @@ public class PostServiceImpl implements PostService {
   public void approvePost(Long id, Boolean approved) {
     Post post = postRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
+            ApiMessages.ID_NOT_FOUND, HttpStatus.BAD_REQUEST));
     post.setApproved(approved);
     postRepository.save(post);
     log.info("Post approve status {}", post);

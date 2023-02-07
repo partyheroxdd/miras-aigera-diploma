@@ -1,11 +1,10 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.converter.RoleDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
-import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.RoleDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.RoleDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.RoleDtoConverter;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
 import kz.iitu.miras_aigera_diploma.service.RoleService;
@@ -23,29 +22,11 @@ public class RoleServiceImpl implements RoleService {
   private final RoleDtoConverter roleDtoConverter;
 
   @Override
-  public RoleDto saveRole(RoleDto roleDto) {
-    if (!roleDto.getName().startsWith("ROLE_")) {
-      throw new CustomSecurityException(ApiMessages.INVALID_ROLE_NAME, HttpStatus.BAD_REQUEST);
-    }
-    Role role = Role.builder()
-        .name(roleDto.getName()).build();
-    roleRepository.save(role);
-    log.info("Saving role {}", role);
-    return roleDto;
-  }
-
-  @Override
   public RoleDto getRole(Long id) {
     Role role = roleRepository.findById(id).orElseThrow(() -> new NotFoundException(
-        ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
+        ApiMessages.ID_NOT_FOUND, HttpStatus.BAD_REQUEST));
     log.info("Getting role {}", role);
     return roleDtoConverter.convert(role);
-  }
-
-  @Override
-  public void deleteRole(Long id) {
-    roleRepository.deleteById(id);
-    log.info("Role with id {} deleted", id);
   }
 
   @Override

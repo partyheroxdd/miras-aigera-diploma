@@ -1,4 +1,4 @@
-#BackEnd Spring Boot App
+#Spring Boot App
 version: '3.1'
 services:
   app:
@@ -13,14 +13,16 @@ services:
     depends_on:
       - postgresqldb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresqldb:5432/lost-found-app
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: zxc
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      DB_HOST: postgresqldb
+      DB_PORT: 5432
+      DB_NAME: lost-found-app
+      DB_USER: postgres
+      DB_PASSWORD: zxc
+      DDL_AUTO: update
     networks:
       - backend
 
-#Postgresql DataBase
+  #PostgreSQL DB
   postgresqldb:
     image: postgres
     container_name: diploma-postgresql

@@ -1,4 +1,4 @@
-package kz.iitu.miras_aigera_diploma.model.dto;
+package kz.iitu.miras_aigera_diploma.model.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Schema(description = "DTO for user me info")
-public class UserMeInfoDto {
+@Schema(description = "DTO for user info")
+public class UserInfoDto {
 
   @Schema(description = "User's id", example = "1")
   private Long id;
@@ -21,6 +21,12 @@ public class UserMeInfoDto {
   @Schema(description = "User's username", example = "020501550659")
   private String username;
 
-  @Schema(description = "User's role name", example = "ROLE_USER")
-  private String roleName;
+  @Schema(description = "User's full name", example = "Serikov Serik")
+  private String fullName;
+
+  @Schema(description = "User's address", example = "Tole bi 40, 232")
+  private String address;
+
+  @Schema(description = "User's phone", example = "+77005553535")
+  private String phone;
 }

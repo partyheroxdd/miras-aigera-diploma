@@ -1,10 +1,9 @@
-package kz.iitu.miras_aigera_diploma.model.dto;
+package kz.iitu.miras_aigera_diploma.model.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Schema(description = "DTO for update posts")
 public class PostUpdateDto {
 
@@ -30,8 +28,8 @@ public class PostUpdateDto {
   @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
   private LocalDateTime dateTime;
 
-  @Schema(description = "Post category name", example = "lost thing", required = true)
-  private String postCategory;
+  @Schema(description = "Post category id", example = "1", required = true)
+  private Long postCategoryId;
 
   @Schema(description = "Post publish description", example = "White red color")
   private String description;

@@ -3,10 +3,10 @@ package kz.iitu.miras_aigera_diploma.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserChangePasswordDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserMeInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +28,20 @@ public class AuthController {
 
   @PostMapping("/register")
   @Operation(summary = "Method to registration user")
-  public ResponseEntity<String> register(
+  public ResponseEntity<AccessToken> register(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of User Register DTO")
       @Valid @RequestBody UserRegisterDto userRegisterDto) {
     AccessToken accessToken = authService.register(userRegisterDto);
-    return ResponseEntity.ok(accessToken.getToken());
+    return ResponseEntity.ok(accessToken);
   }
 
   @PostMapping("/login")
   @Operation(summary = "Method to login user")
-  public ResponseEntity<String> login(
+  public ResponseEntity<AccessToken> login(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of User Login DTO")
       @Valid @RequestBody UserLoginDto userLoginDto) {
     AccessToken accessToken = authService.login(userLoginDto);
-    return ResponseEntity.ok(accessToken.getToken());
+    return ResponseEntity.ok(accessToken);
   }
 
   @PostMapping("/password")

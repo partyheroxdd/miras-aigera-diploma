@@ -3,14 +3,14 @@ package kz.iitu.miras_aigera_diploma.service.impl;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import kz.iitu.miras_aigera_diploma.converter.UserMeInfoDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserChangePasswordDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserMeInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserMeInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
@@ -21,6 +21,7 @@ import kz.iitu.miras_aigera_diploma.service.AuthService;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -123,7 +124,10 @@ public class AuthServiceImpl implements AuthService {
     if (!passwordEncoder.matches(userChangePasswordDTO.getPassword(), user.getPassword())) {
       throw new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
     }
-
+    if (!StringUtils.equals(userChangePasswordDTO.getPassword(),
+        userChangePasswordDTO.getReTypedPassword())) {
+      throw new CustomSecurityException(ApiMessages.PASSWORD_DOESNT_MATCH, HttpStatus.BAD_REQUEST);
+    }
     user.setPassword(passwordEncoder.encode(userChangePasswordDTO.getReTypedPassword()));
 
     userRepository.save(user);

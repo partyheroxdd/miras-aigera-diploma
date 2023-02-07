@@ -1,4 +1,4 @@
-package kz.iitu.miras_aigera_diploma.model.dto;
+package kz.iitu.miras_aigera_diploma.model.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;

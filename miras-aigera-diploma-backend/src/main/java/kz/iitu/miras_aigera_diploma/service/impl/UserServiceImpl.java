@@ -2,7 +2,7 @@ package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.UserRepository;
 import kz.iitu.miras_aigera_diploma.service.UserService;

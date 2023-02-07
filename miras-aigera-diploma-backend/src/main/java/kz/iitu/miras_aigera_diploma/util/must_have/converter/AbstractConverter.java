@@ -27,7 +27,7 @@ public abstract class AbstractConverter<S, T> implements Converter<S, T>, Filler
     try {
       return clazz.getDeclaredConstructor().newInstance();
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-        NoSuchMethodException e) {
+             NoSuchMethodException e) {
       throw new IllegalStateException(String.format("Не удалось создать экземпляр класса %s, " +
           "возможно не был задан конструктор без параметров", clazz.getName()), e);
     }

@@ -1,8 +1,10 @@
-package kz.iitu.miras_aigera_diploma.converter;
+package kz.iitu.miras_aigera_diploma.converter.post;
 
-import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostCreateDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.repository.PostCategoryRepository;
+import kz.iitu.miras_aigera_diploma.repository.PostRepository;
+import kz.iitu.miras_aigera_diploma.service.PostCategoryService;
 import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ public class PostCreateDtoConverter extends AbstractConverter<PostCreateDto, Pos
   public void fill(PostCreateDto source, Post target) {
     target.setCity(source.getCity());
     target.setDistrict(source.getDistrict());
-    target.setPostCategory(postCategoryRepository.findByName(source.getPostCategory()));
+    target.setPostCategory(postCategoryRepository.findById(source.getPostCategoryId()).get());
     target.setDateTime(source.getDateTime());
     target.setDescription(source.getDescription());
     target.setDetails(source.getDetails());

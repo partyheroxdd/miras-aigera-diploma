@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserInfoDto;
 import kz.iitu.miras_aigera_diploma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
