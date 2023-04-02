@@ -35,7 +35,7 @@ public class RoleController {
   @PostMapping
   @Operation(summary = "Save new role")
   public ResponseEntity<RoleDto> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of Role") @RequestBody RoleDto roleDto) {
+      @RequestBody RoleDto roleDto) {
     return ResponseEntity.ok(roleService.saveRole(roleDto));
   }
 

@@ -43,14 +43,14 @@ public class PostController {
   @PostMapping
   @Operation(summary = "Save new post")
   public ResponseEntity<PostCreateDto> save(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of PostCreateDto") @RequestBody PostCreateDto postCreateDto) {
+      @RequestBody PostCreateDto postCreateDto) {
     return ResponseEntity.ok(postService.savePost(postCreateDto));
   }
 
   @PutMapping()
   @Operation(summary = "Method to update post")
   public ResponseEntity<PostUpdateDto> updatePost(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request Body of PostUpdateDto") @RequestBody PostUpdateDto postUpdateDto) {
+      @RequestBody PostUpdateDto postUpdateDto) {
     return ResponseEntity.ok(postService.updatePost(postUpdateDto));
   }
 
