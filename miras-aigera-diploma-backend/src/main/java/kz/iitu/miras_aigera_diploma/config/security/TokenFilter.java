@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.security.ITokenProvider;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,12 +19,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TokenFilter extends OncePerRequestFilter {
 
-  private final ITokenProvider tokenProvider;
+  ITokenProvider tokenProvider;
 
   @Override
-
   protected void doFilterInternal(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse, FilterChain filterChain)
       throws ServletException, IOException {

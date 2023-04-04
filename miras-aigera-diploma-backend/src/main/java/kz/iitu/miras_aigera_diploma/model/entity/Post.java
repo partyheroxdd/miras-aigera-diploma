@@ -1,20 +1,19 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,45 +23,42 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @Entity
-@ToString
 @Table(name = "posts")
-@Accessors(chain = true)
 @FieldNameConstants
-public class Post {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Post extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  String number;
 
-  @Column(name = "city")
-  private String city;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "city_id")
+  City city;
 
-  @Column(name = "district")
-  private String district;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "district_id")
+  District district;
 
-  @Column(name = "datetime")
-  @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
-  private LocalDateTime dateTime;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "status_id")
+  PostStatus status;
 
-  @ManyToOne
-  private PostCategory postCategory;
+  LocalDateTime dateTime;
 
-  @Column(name = "description")
-  private String description;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id")
+  PostCategory category;
 
-  @Column(name = "details")
-  private String details;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  User user;
 
-  @Column(name = "approved")
-  private Boolean approved;
+  String description;
+
+  String additionalInfo;
 
   @CreationTimestamp
-  @Column(name = "created_at")
-  @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-  private LocalDateTime createdAt;
+  Timestamp createdAt;
 
   @UpdateTimestamp
-  @Column(name = "updated_at")
-  @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-  private LocalDateTime updatedAt;
+  Timestamp updatedAt;
 }

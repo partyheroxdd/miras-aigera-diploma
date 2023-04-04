@@ -1,115 +1,102 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
-import java.util.List;
 import java.util.Objects;
-import kz.iitu.miras_aigera_diploma.converter.PostCreateDtoConverter;
-import kz.iitu.miras_aigera_diploma.converter.PostInfoDtoConverter;
-import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
-import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.PostCreateDto;
-import kz.iitu.miras_aigera_diploma.model.dto.PostInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.PostUpdateDto;
+import kz.iitu.miras_aigera_diploma.converter.post.PostCreateDtoConverter;
+import kz.iitu.miras_aigera_diploma.converter.post.PostInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.converter.post.PostListInfoDtoConverter;
+import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
+import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostChangeStatusDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostCreateDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostListInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.post.PostSearchDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
-import kz.iitu.miras_aigera_diploma.repository.PostCategoryRepository;
+import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.PostRepository;
+import kz.iitu.miras_aigera_diploma.repository.PostStatusRepository;
 import kz.iitu.miras_aigera_diploma.service.PostService;
-import kz.iitu.miras_aigera_diploma.util.PostSpec;
+import kz.iitu.miras_aigera_diploma.service.UserService;
+import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
-import kz.iitu.miras_aigera_diploma.util.must_have.query.CommonSpec;
+import kz.iitu.miras_aigera_diploma.util.must_have.specification.SpecificationBuilder;
+import kz.iitu.miras_aigera_diploma.util.spec.PostSpec;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PostServiceImpl implements PostService {
 
-  private final PostRepository postRepository;
-  private final PostInfoDtoConverter postInfoDtoConverter;
-  private final PostCreateDtoConverter postCreateDtoConverter;
-  private final PostCategoryRepository postCategoryRepository;
+  PostRepository postRepository;
+  PostStatusRepository postStatusRepository;
 
-  private final List<String> POST_SEARCH_FIELDS = List.of(
-      Post.Fields.details,
-      Post.Fields.district,
-      Post.Fields.city,
-      Post.Fields.dateTime,
-      Post.Fields.description
-  );
+  UserService userService;
+
+  PostInfoDtoConverter postInfoDtoConverter;
+  PostListInfoDtoConverter postListInfoDtoConverter;
+  PostCreateDtoConverter postCreateDtoConverter;
 
   @Override
-  public PostCreateDto savePost(PostCreateDto postCreateDto) {
-    Post post = postCreateDtoConverter.convert(postCreateDto);
-    postRepository.save(post);
-    log.info("Post {} saved", post);
-    return postCreateDto;
+  @Transactional
+  public void save(PostCreateDto postCreateDto) {
+    postRepository.save(postCreateDtoConverter.convert(postCreateDto));
   }
 
   @Override
-  public PostUpdateDto updatePost(PostUpdateDto postUpdateDto) {
-    Post post = postRepository.findById(postUpdateDto.getId())
-        .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    post.setCity(postUpdateDto.getCity())
-        .setDistrict(postUpdateDto.getDistrict())
-        .setDateTime(postUpdateDto.getDateTime())
-        .setPostCategory(postCategoryRepository.findByName(
-            postUpdateDto.getPostCategory()))
-        .setDescription(postUpdateDto.getDescription())
-        .setDetails(postUpdateDto.getDetails());
+  @Transactional
+  public void changeStatus(PostChangeStatusDto postChangeStatusDto) {
+    Post post = getPost(postChangeStatusDto.getId());
+    post.setStatus(postStatusRepository.findByCode(postChangeStatusDto.getStatusCode()));
     postRepository.save(post);
-    log.info("Post updated to {}", post);
-    return postUpdateDto;
   }
 
   @Override
-  public PostInfoDto getPost(Long id) {
-    Post post = postRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    log.info("Getting post {}", post);
+  @Transactional(readOnly = true)
+  public PostInfoDto findById(Long id) {
+    Post post = getPost(id);
     return postInfoDtoConverter.convert(post);
   }
 
-  @Override
-  public void deletePost(Long id) {
-    Post post = postRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    postRepository.delete(post);
-    log.info("Lost Thing Post with id {} deleted", id);
+  private Post getPost(Long id) {
+    return postRepository.findById(id).orElseThrow(() -> new DiplomaCoreException(
+        HttpStatus.BAD_REQUEST, ApiMessages.POST_NOT_FOUND, "Post with this id not found"));
   }
 
   @Override
-  public void approvePost(Long id, Boolean approved) {
-    Post post = postRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(
-            ApiMessages.ID_NOT_FOUND, HttpStatus.NOT_FOUND));
-    post.setApproved(approved);
-    postRepository.save(post);
-    log.info("Post approve status {}", post);
-  }
+  @Transactional(readOnly = true)
+  public PageDTO<PostListInfoDto> findAll(PostSearchDto dto, Pageable pageable) {
 
-  @Override
-  public PageDTO<PostInfoDto> getAllPosts(String city, Boolean approved, String query,
-      Pageable pageable) {
-    Specification<Post> postSpecification = CommonSpec.search(query,
-        POST_SEARCH_FIELDS.toArray(String[]::new));
+    Specification<Post> postSpec = new SpecificationBuilder<>();
 
-    if (Objects.nonNull(city)) {
-      postSpecification.and(PostSpec.cityFilter(city));
+    User user = userService.findByUsername(JwtUtil.getUsername());
+    String role = JwtUtil.getRole();
+
+    switch (role) {
+      case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
+      case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(PostSpec.districtFilter(user.getDistrict().getId()));
+      case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getId()));
     }
 
-    if (Objects.nonNull(approved)) {
-      postSpecification.and(PostSpec.approvedFilter(approved));
+    if (Objects.nonNull(dto.getDateFrom()) && Objects.nonNull(dto.getDateTo())) {
+      postSpec.and(PostSpec.dateFilter(dto.getDateFrom(), dto.getDateTo()));
     }
-
-    Page<Post> all = postRepository.findAll(postSpecification, pageable);
-    return postInfoDtoConverter.convert(all);
+    if (Objects.nonNull(dto.getCategoryId())) {
+      postSpec.and(PostSpec.categoryFilter(dto.getCategoryId()));
+    }
+    if (Objects.nonNull(dto.getStatusId())) {
+      postSpec.and(PostSpec.statusFilter(dto.getStatusId()));
+    }
+    if (Objects.nonNull(dto.getQuery())) {
+      postSpec.and(PostSpec.queryFilter(dto.getQuery()));
+    }
+    return postListInfoDtoConverter.convert(postRepository.findAll(postSpec, pageable));
   }
 }

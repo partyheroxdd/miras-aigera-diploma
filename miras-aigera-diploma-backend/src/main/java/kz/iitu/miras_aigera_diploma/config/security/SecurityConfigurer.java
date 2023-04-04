@@ -1,7 +1,9 @@
 package kz.iitu.miras_aigera_diploma.config.security;
 
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,13 +22,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     prePostEnabled = true
 )
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-  private final UserDetailsService userDetailsService;
+  UserDetailsService userDetailsService;
 
-  private final PasswordEncoder passwordEncoder;
+  PasswordEncoder passwordEncoder;
 
-  private final TokenFilter tokenFilter;
+  TokenFilter tokenFilter;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -37,10 +40,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     http.
         authorizeRequests()
-        .antMatchers("/api/roles/**").access("hasRole('ROLE_ADMIN')")
-        .antMatchers("/api/users/**").access("hasRole('ROLE_ADMIN')")
-        .antMatchers("/api/posts/approve/**")
-        .access("hasAnyRole('ROLE_ADMIN', 'ROLE_POLICEMAN')")
+        .antMatchers("/api/roles").access("hasRole('ROLE_ADMIN')")
+        .antMatchers("/api/posts/status")
+        .access("hasAnyRole('ROLE_ADMIN', 'ROLE_DISTRICT_POLICEMAN', 'ROLE_PROSECUTOR')")
         .anyRequest().authenticated();
     http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -56,7 +58,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring().antMatchers("/swagger-ui/**", "/api/v1/api-docs/**", "/api/auth/register",
-        "/api/auth/login", "/api/auth/password", "/actuator/**");
+        "/api/auth/login", "/actuator/**");
   }
 
 

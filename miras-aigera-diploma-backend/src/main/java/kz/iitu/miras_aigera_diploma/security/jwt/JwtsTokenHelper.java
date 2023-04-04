@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
-import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
+import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.security.SecretKey;

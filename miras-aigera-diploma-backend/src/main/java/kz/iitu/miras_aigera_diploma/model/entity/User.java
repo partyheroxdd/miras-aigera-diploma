@@ -1,71 +1,53 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.FieldNameConstants;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor()
+@AllArgsConstructor
 @Entity
 @Builder
-@ToString
+@FieldNameConstants
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  String firstname;
 
-  @Column(name = "username", unique = true, nullable = false)
-  private String username;
+  String lastname;
 
-  @Column(name = "fullname", nullable = false)
-  private String fullName;
+  String midname;
 
-  @Column(name = "address")
-  private String address;
+  String username;
 
-  @Column(name = "location")
-  private String location;
+  String phoneNumber;
 
-  @Column(name = "position")
-  private String position;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "city_id")
+  City city;
 
-  @Column(name = "phone", unique = true, nullable = false)
-  private String phone;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "district_id")
+  District district;
 
-  @Column(name = "password")
-  private String password;
+  String password;
 
+  String address;
 
-  @ManyToMany
-  @JoinTable(
-      name = "user_roles",
-      joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"
-      ),
-      inverseJoinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id"
-      )
-  )
-  @JsonIgnore
-  private Set<Role> roles = new HashSet<>();
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "role_id")
+  Role role;
 }

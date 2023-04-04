@@ -1,0 +1,16 @@
+package kz.iitu.miras_aigera_diploma.model.enums;
+
+public enum CategoryCode {
+  BODY_HARM,
+  KIDNAPPING,
+  SEXUAL_CRIME,
+  EXTREMIST_CRIME,
+  POWER_ABUSE,
+  UNDERAGE_CRIME,
+  PROPERTY_CRIME,
+  HOOLIGANISM,
+  ROAD_VIOLATION,
+  DRUGS_CASES,
+  LOSS_PROPERTY,
+  LOSS_PERSON
+}

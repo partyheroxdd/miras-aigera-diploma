@@ -7,4 +7,5 @@ FROM openjdk:17-alpine
 ENV TZ=Asia/Almaty
 COPY --from=MAVEN_BUILD /home/app/target/diploma-app-backend.jar diploma-app-backend.jar
 EXPOSE 8080
+MAINTAINER Miras Madiyev <27677@iitu.edu.kz>
 ENTRYPOINT ["java","-jar","diploma-app-backend.jar"]

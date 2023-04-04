@@ -1,6 +1,6 @@
 package kz.iitu.miras_aigera_diploma.util.must_have.query;
 
-import kz.iitu.miras_aigera_diploma.util.SpecificationBuilder;
+import kz.iitu.miras_aigera_diploma.util.must_have.specification.SpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 

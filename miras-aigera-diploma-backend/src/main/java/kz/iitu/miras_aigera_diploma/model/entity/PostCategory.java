@@ -1,30 +1,30 @@
 package kz.iitu.miras_aigera_diploma.model.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.FieldNameConstants;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@ToString
 @Table(name = "post_categories")
-public class PostCategory {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldNameConstants
+public class PostCategory extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  String name;
 
-  @Column(name = "name")
-  private String name;
+  @Enumerated(EnumType.STRING)
+  CategoryCode code;
 }

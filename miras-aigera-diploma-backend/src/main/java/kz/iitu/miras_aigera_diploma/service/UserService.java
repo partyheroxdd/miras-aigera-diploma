@@ -1,14 +1,20 @@
 package kz.iitu.miras_aigera_diploma.service;
 
-import java.util.List;
-import kz.iitu.miras_aigera_diploma.model.dto.UserInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserChangePasswordDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserMeInfoDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserUpdateDto;
+import kz.iitu.miras_aigera_diploma.model.entity.User;
 
 public interface UserService {
 
-  UserInfoDto getUser(Long id);
+  UserInfoDto getUserProfile();
 
-  void deleteUser(Long id);
+  UserMeInfoDto getMe();
 
-  List<UserInfoDto> getAllUsers();
+  void updateUserProfile(UserUpdateDto userUpdateDto);
 
+  User findByUsername(String username);
+
+  void changePassword(UserChangePasswordDto userChangePasswordDTO);
 }

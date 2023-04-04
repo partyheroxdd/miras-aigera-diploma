@@ -1,14 +1,14 @@
 #DB
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/lost-found-app
-    username: postgres
-    password: zxc
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:lost-found-app}?serverTimezone=Asia/Almaty
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:zxc}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
     show-sql: false
   flyway:
@@ -54,9 +54,9 @@ server:
   compression:
     enabled: true
 
-#Application
+#Application info
 application:
-  title: Lost found service application
+  title: CitizenGuard service
   version: v1.0
 
 

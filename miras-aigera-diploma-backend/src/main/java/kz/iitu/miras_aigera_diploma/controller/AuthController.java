@@ -3,16 +3,14 @@ package kz.iitu.miras_aigera_diploma.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,38 +19,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authorization API", description = "Methods for authorization")
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Tag(name = "Authorization API", description = "Methods for user authorization")
 public class AuthController {
 
-  private final AuthService authService;
+  AuthService authService;
 
   @PostMapping("/register")
   @Operation(summary = "Method to registration user")
-  public ResponseEntity<String> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+  public ResponseEntity<AccessToken> register(
+      @Valid @RequestBody UserRegisterDto userRegisterDto) {
     AccessToken accessToken = authService.register(userRegisterDto);
-    return ResponseEntity.ok(accessToken.getToken());
+    return ResponseEntity.ok(accessToken);
   }
 
   @PostMapping("/login")
   @Operation(summary = "Method to login user")
-  public ResponseEntity<String> login(
+  public ResponseEntity<AccessToken> login(
       @Valid @RequestBody UserLoginDto userLoginDto) {
     AccessToken accessToken = authService.login(userLoginDto);
-    return ResponseEntity.ok(accessToken.getToken());
-  }
-
-  @PostMapping("/password")
-  @Operation(summary = "Method to change password")
-  public ResponseEntity<?> changePassword(
-      @Valid @RequestBody UserChangePasswordDto userChangePasswordDTO) {
-    authService.changePassword(userChangePasswordDTO);
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
-
-  @GetMapping("/me")
-  @Operation(summary = "Method to get my credentials")
-  public ResponseEntity<UserMeInfoDto> getMe() {
-    return ResponseEntity.ok(authService.getMe());
+    return ResponseEntity.ok(accessToken);
   }
 
 }

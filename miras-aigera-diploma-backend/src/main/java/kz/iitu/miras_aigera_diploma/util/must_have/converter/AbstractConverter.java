@@ -9,12 +9,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
-public abstract class AbstractConverter<S, T> implements Converter<S, T>, Filler<S, T> {
+public abstract class AbstractConverter<S, T> implements CustomConverter<S, T>, Filler<S, T> {
 
 
   @Override

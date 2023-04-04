@@ -1,138 +1,91 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import kz.iitu.miras_aigera_diploma.converter.UserMeInfoDtoConverter;
-import kz.iitu.miras_aigera_diploma.exceptions.NotFoundException;
+import kz.iitu.miras_aigera_diploma.converter.user.UserRegisterDtoConverter;
+import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
-import kz.iitu.miras_aigera_diploma.model.Constants.ApiMessages;
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
+import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
-import kz.iitu.miras_aigera_diploma.repository.RoleRepository;
 import kz.iitu.miras_aigera_diploma.repository.UserRepository;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 import kz.iitu.miras_aigera_diploma.security.ITokenProvider;
 import kz.iitu.miras_aigera_diploma.service.AuthService;
-import kz.iitu.miras_aigera_diploma.util.JwtUtil;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthServiceImpl implements AuthService {
 
-  private final ITokenProvider tokenProvider;
+  ITokenProvider tokenProvider;
 
-  private final PasswordEncoder passwordEncoder;
+  AuthenticationManager authenticationManager;
 
-  private final UserRepository userRepository;
+  UserRepository userRepository;
 
-  private final RoleRepository roleRepository;
-
-  private final AuthenticationManager authenticationManager;
-
-  private final UserMeInfoDtoConverter userMeInfoDtoConverter;
+  UserRegisterDtoConverter userRegisterDtoConverter;
 
   @Override
   public AccessToken register(UserRegisterDto userRegisterDto) {
     if (!userRegisterDto.getUsername().matches("^\\d{12}$")) {
       throw new CustomSecurityException(ApiMessages.INVALID_USERNAME, HttpStatus.BAD_REQUEST);
     }
-    String username = null;
-    Set<Role> roles = null;
-    try {
-      checkUserExistsWithUserName(userRegisterDto.getUsername());
-      User user = User.builder()
-          .username(userRegisterDto.getUsername())
-          .fullName(userRegisterDto.getFullName())
-          .address(userRegisterDto.getAddress())
-          .location(userRegisterDto.getLocation())
-          .position(userRegisterDto.getPosition())
-          .phone(userRegisterDto.getPhone())
-          .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-          .roles(getRoles(userRegisterDto.getRoles(), userRegisterDto))
-          .build();
-      username = user.getUsername();
-      roles = user.getRoles();
-      userRepository.save(user);
-      log.info("User {} successfully registered", user);
-    } catch (Exception e) {
-      log.error(e.getMessage());
-    }
+
+    Set<Role> roles = new HashSet<>();
+    checkUserExisting(userRegisterDto.getUsername(), userRegisterDto.getPhoneNumber());
+    User user = userRegisterDtoConverter.convert(userRegisterDto);
+    String username = user.getUsername();
+    roles.add(user.getRole());
+    userRepository.save(user);
 
     return tokenProvider.createToken(username, roles);
   }
 
   @Override
+  @Transactional
   public AccessToken login(UserLoginDto userLoginDto) {
     String username = userLoginDto.getUsername();
     String password = userLoginDto.getPassword();
     try {
       Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(username, password));
-      Set<Role> roles = userRepository.findByUsername(username).get().getRoles();
-      log.info("User successfully login {}", userLoginDto.getUsername());
+      Role role = userRepository.findByUsername(username).orElseThrow(
+              () -> new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.USER_NOT_FOUND,
+                  "User with this username not found"))
+          .getRole();
+      Set<Role> roles = new HashSet<>();
+      roles.add(role);
       return tokenProvider.createToken(username, roles);
-
     } catch (AuthenticationException exception) {
       log.error(exception.getMessage());
-      throw new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
-
+      throw new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.BAD_CREDENTIALS,
+          "Authorization error, please check the correctness of the data entered");
     }
-
   }
 
-  private void checkUserExistsWithUserName(String username) {
+  private void checkUserExisting(String username, String phoneNumber) {
     if (userRepository.existsByUsername(username)) {
-      throw new CustomSecurityException(ApiMessages.USER_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+      throw new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.USER_ALREADY_EXISTS,
+          "User already exists with username");
     }
-  }
-
-  private Set<Role> getRoles(String[] roles, UserRegisterDto userRegisterDto) {
-    Set<Role> userRoles = new HashSet<>();
-    for (String role : roles) {
-      if (Objects.nonNull(userRegisterDto.getPosition()) && Objects.nonNull(
-          userRegisterDto.getLocation())) {
-        role = "ROLE_POLICEMAN";
-      }
-      userRoles.add(roleRepository.findByName(role));
+    if (userRepository.existsByPhoneNumber(phoneNumber)) {
+      throw new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.PHONE_NUMBER_EXISTS,
+          "User already exists with phone number");
     }
-    return userRoles;
-  }
-
-  @Override
-  public void changePassword(UserChangePasswordDto userChangePasswordDTO) {
-    User user = userRepository.findByUsername(userChangePasswordDTO.getUsername()).orElseThrow(
-        () -> new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST));
-    log.info("Find user {} to change password", user.getUsername());
-    if (!passwordEncoder.matches(userChangePasswordDTO.getPassword(), user.getPassword())) {
-      throw new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
-    }
-
-    user.setPassword(passwordEncoder.encode(userChangePasswordDTO.getReTypedPassword()));
-
-    userRepository.save(user);
-  }
-
-  @Override
-  public UserMeInfoDto getMe() {
-    User user = userRepository.findByUsername(JwtUtil.getUsername()).orElseThrow(
-        () -> new NotFoundException(ApiMessages.USER_NOT_FOUND, HttpStatus.BAD_REQUEST));
-    return userMeInfoDtoConverter.convert(user);
   }
 }

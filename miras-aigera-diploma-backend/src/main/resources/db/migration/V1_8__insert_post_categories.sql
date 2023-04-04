@@ -1,0 +1,16 @@
+insert into post_categories(name, code)
+values ('Grievous bodily harm', 'BODY_HARM'),
+       ('Kidnapping', 'KIDNAPPING'),
+       ('Crimes against sexual inviolability and sexual freedom of the individual', 'SEXUAL_CRIME'),
+       ('Inciting hatred or enmity, as well as crimes of an extremist nature', 'EXTREMIST_CRIME'),
+       ('Crimes of exceeding official powers or their abuse, bribes and forgery', 'POWER_ABUSE'),
+       ('Grave and especially grave crimes committed by underage and against underage',
+        'UNDERAGE_CRIME'),
+       ('Crimes against property (theft, fraud, robbery, embezzlement and others)',
+        'PROPERTY_CRIME'),
+       ('Hooliganism', 'HOOLIGANISM'),
+       ('Violation of the rules of the road and the operation of technical means',
+        'ROAD_VIOLATION'),
+       ('Cases related to the manufacture and distribution of drugs', 'DRUGS_CASES'),
+       ('Loss of property', 'LOSS_PROPERTY'),
+       ('Loss of a person', 'LOSS_PERSON')

@@ -27,9 +27,9 @@ public class JwtTokenProvider implements ITokenProvider {
   private long expiration;
 
   @Override
-  public AccessToken createToken(String username, Set<Role> roles) {
+  public AccessToken createToken(String username, Set<Role> role) {
     SecretKey secretKey = new SecretKey(secretKeyValue, expiration);
-    String token = tokenHelper.generateJwtToken(secretKey, username, roles);
+    String token = tokenHelper.generateJwtToken(secretKey, username, role);
     return new AccessToken(token);
   }
 

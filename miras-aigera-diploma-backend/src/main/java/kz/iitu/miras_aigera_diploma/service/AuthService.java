@@ -1,9 +1,7 @@
 package kz.iitu.miras_aigera_diploma.service;
 
-import kz.iitu.miras_aigera_diploma.model.dto.UserChangePasswordDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserLoginDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserMeInfoDto;
-import kz.iitu.miras_aigera_diploma.model.dto.UserRegisterDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
+import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
 
 public interface AuthService {
@@ -12,7 +10,4 @@ public interface AuthService {
 
   AccessToken login(UserLoginDto userLoginDto);
 
-  void changePassword(UserChangePasswordDto userChangePasswordDTO);
-
-  UserMeInfoDto getMe();
 }
