@@ -30,7 +30,7 @@ public class CDNMinioServiceImpl implements CDNMinioService {
   private static final String UPLOAD_FILE_ERROR_LOG_MESSAGE = "uploadFileAndGetBucketKey - произошла ошибка при загрузке файла %s CDN.";
   private static final String UPLOAD_FILE_ERROR_CODE = "UPLOAD_FILE_TO_OBJECT_STORE_ERROR";
   private static final String UPLOAD_FILE_LOG_MESSAGE = "Загрузить файл %s.";
-  private static final String PREFIX_KEY = "documents/";
+  private static final String PREFIX_KEY = "images/";
 
   @Autowired
   @Qualifier("amazonMinioS3Client")
@@ -56,7 +56,8 @@ public class CDNMinioServiceImpl implements CDNMinioService {
     } catch (AmazonServiceException e) {
       log.error(String.format(UPLOAD_FILE_ERROR_LOG_MESSAGE, multipartFile.getOriginalFilename()),
           e);
-      throw new DiplomaCoreException(HttpStatus.INTERNAL_SERVER_ERROR, UPLOAD_FILE_ERROR_CODE, multipartFile.getOriginalFilename());
+      throw new DiplomaCoreException(HttpStatus.INTERNAL_SERVER_ERROR, UPLOAD_FILE_ERROR_CODE,
+          multipartFile.getOriginalFilename());
     }
   }
 

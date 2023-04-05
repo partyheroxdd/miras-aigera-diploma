@@ -53,7 +53,7 @@ public class PostController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Method to save new post")
   public ResponseEntity<String> save(
-      @Valid @ParameterObject @RequestPart(value = "postCreateDto") PostCreateDto postCreateDto,
+      @Valid @RequestPart(value = "postCreateDto") PostCreateDto postCreateDto,
       @Parameter(description = "Post image", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
       @RequestPart(value = "image", required = false)
           MultipartFile file) {
