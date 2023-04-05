@@ -45,7 +45,7 @@ public class PostInfoDto {
   String additionalInfo;
 
   @Schema(description = "Post published citizen username", example = "020501550659")
-  String username;
+  String applicant;
 
   @Schema(description = "Post image url")
   String imageUrl;
