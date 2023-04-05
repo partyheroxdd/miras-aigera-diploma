@@ -2,7 +2,6 @@ package kz.iitu.miras_aigera_diploma.converter.post;
 
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostListInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
-import kz.iitu.miras_aigera_diploma.service.UserService;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;
 import lombok.AccessLevel;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PostListInfoDtoConverter extends AbstractConverter<Post, PostListInfoDto> {
 
-  UserService userService;
-
   @Override
   public void fill(Post source, PostListInfoDto target) {
     String role = JwtUtil.getRole();
@@ -27,5 +24,7 @@ public class PostListInfoDtoConverter extends AbstractConverter<Post, PostListIn
     if ("ROLE_USER".equals(role) || "ROLE_ADMIN".equals(role)) {
       target.setStatus(source.getStatus().getName());
     }
+    target.setDistrict(source.getDistrict().getName());
+    target.setCity(source.getCity().getName());
   }
 }

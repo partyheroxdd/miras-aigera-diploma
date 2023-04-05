@@ -35,4 +35,9 @@ public class PostListInfoDto {
   @JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
   LocalDateTime incidentTime;
 
+  @Schema(description = "Post city", example = "Almaty")
+  String city;
+
+  @Schema(description = "Post district", example = "Bostandyksky")
+  String district;
 }
