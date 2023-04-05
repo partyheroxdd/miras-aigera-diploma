@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,4 +60,6 @@ public class Post extends BaseEntity {
 
   @UpdateTimestamp
   Timestamp updatedAt;
+
+  String imageUrl;
 }

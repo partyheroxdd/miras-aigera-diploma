@@ -1,0 +1,20 @@
+#Minio
+version: '3.1'
+
+services:
+  diploma-minio:
+    container_name: diploma-minio
+    image: minio/minio:latest
+    command: server --console-address ":9001" /data/
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: always
+    environment:
+      MINIO_REGION: ru-central1-a
+      MINIO_ROOT_USER: citizen-guard
+      MINIO_ROOT_PASSWORD: Wbul0ZKySm7EUjRL10mVs0EFNnsk35B1
+    volumes:
+      - minio-storage:/data
+volumes:
+  minio-storage:

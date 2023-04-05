@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
+import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
 import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.entity.Role;
 import kz.iitu.miras_aigera_diploma.security.AccessToken;
@@ -48,8 +48,8 @@ public class JwtsTokenHelper implements IJwtTokenHelper {
       Jwts.parser().setSigningKey(secretKeyEncoded).parseClaimsJws(accessToken.getToken());
       return true;
     } catch (JwtException | IllegalArgumentException exception) {
-      throw new CustomSecurityException(ApiMessages.INVALID_TOKEN,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new DiplomaCoreException(HttpStatus.UNAUTHORIZED, ApiMessages.INVALID_TOKEN,
+          "Expired or Invalid Token");
     }
   }
 

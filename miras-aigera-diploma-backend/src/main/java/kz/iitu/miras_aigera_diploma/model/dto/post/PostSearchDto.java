@@ -2,8 +2,6 @@ package kz.iitu.miras_aigera_diploma.model.dto.post;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
-import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
-import kz.iitu.miras_aigera_diploma.model.enums.StatusCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +25,12 @@ public class PostSearchDto {
   @Schema(description = "Posts incident date to filter", type = "string", pattern = "dd-MM-yyyy", example = "25-04-2022")
   @DateTimeFormat(pattern = "dd-MM-yyyy")
   Date dateTo;
+
+  @Schema(description = "District filter", example = "5")
+  Long districtId;
+
+  @Schema(description = "City filter", example = "16")
+  Long cityId;
 
   @Schema(description = "Post category filter", example = "1")
   Long categoryId;

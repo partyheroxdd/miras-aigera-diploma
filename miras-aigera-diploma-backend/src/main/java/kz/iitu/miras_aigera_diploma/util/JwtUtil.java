@@ -1,6 +1,6 @@
 package kz.iitu.miras_aigera_diploma.util;
 
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
@@ -14,20 +14,19 @@ public class JwtUtil {
 
   public String getUsername() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (Objects.nonNull(authentication)) {
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      return userDetails.getUsername();
-    }
-    return null;
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    return userDetails.getUsername();
   }
 
   public String getRole() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (Objects.nonNull(authentication)) {
-      Set<String> roles = authentication.getAuthorities().stream()
-          .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-      return roles.stream().findFirst().get();
+    Set<String> roles = authentication.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    Optional<String> roleOptional = roles.stream().findFirst();
+    String role = "";
+    if (roleOptional.isPresent()) {
+      role = roleOptional.get();
     }
-    return null;
+    return role;
   }
 }

@@ -7,10 +7,11 @@ import kz.iitu.miras_aigera_diploma.model.dto.post.PostListInfoDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostSearchDto;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
-  void save(PostCreateDto postCreateDto);
+  void save(PostCreateDto postCreateDto, MultipartFile file);
 
   PostInfoDto findById(Long id);
 

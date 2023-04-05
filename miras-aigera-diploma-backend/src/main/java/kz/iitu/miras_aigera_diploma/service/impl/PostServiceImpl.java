@@ -15,8 +15,10 @@ import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.repository.PostRepository;
 import kz.iitu.miras_aigera_diploma.repository.PostStatusRepository;
+import kz.iitu.miras_aigera_diploma.service.CDNMinioService;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.service.UserService;
+import kz.iitu.miras_aigera_diploma.util.FileUtil;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import kz.iitu.miras_aigera_diploma.util.must_have.specification.SpecificationBuilder;
@@ -29,6 +31,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class PostServiceImpl implements PostService {
   PostStatusRepository postStatusRepository;
 
   UserService userService;
+  CDNMinioService cdnMinioService;
 
   PostInfoDtoConverter postInfoDtoConverter;
   PostListInfoDtoConverter postListInfoDtoConverter;
@@ -46,8 +50,14 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional
-  public void save(PostCreateDto postCreateDto) {
-    postRepository.save(postCreateDtoConverter.convert(postCreateDto));
+  public void save(PostCreateDto postCreateDto, MultipartFile file) {
+    if (Objects.nonNull(file)) {
+      FileUtil.check(file);
+    }
+    Post post = postCreateDtoConverter.convert(postCreateDto);
+
+    post.setImageUrl(cdnMinioService.uploadFile(file));
+    postRepository.save(post);
   }
 
   @Override
@@ -81,12 +91,19 @@ public class PostServiceImpl implements PostService {
 
     switch (role) {
       case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
-      case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(PostSpec.districtFilter(user.getDistrict().getId()));
+      case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(
+          PostSpec.districtFilter(user.getDistrict().getId()));
       case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getId()));
     }
 
     if (Objects.nonNull(dto.getDateFrom()) && Objects.nonNull(dto.getDateTo())) {
       postSpec.and(PostSpec.dateFilter(dto.getDateFrom(), dto.getDateTo()));
+    }
+    if (Objects.nonNull(dto.getDistrictId())) {
+      postSpec.and(PostSpec.districtFilter(dto.getDistrictId()));
+    }
+    if (Objects.nonNull(dto.getCityId())) {
+      postSpec.and(PostSpec.cityFilter(dto.getCityId()));
     }
     if (Objects.nonNull(dto.getCategoryId())) {
       postSpec.and(PostSpec.categoryFilter(dto.getCategoryId()));

@@ -2,6 +2,7 @@ package kz.iitu.miras_aigera_diploma.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,11 +50,14 @@ public class PostController {
     return ResponseEntity.ok(postService.findById(id));
   }
 
-  @PostMapping
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Method to save new post")
   public ResponseEntity<String> save(
-      @Valid @RequestBody PostCreateDto postCreateDto) {
-    postService.save(postCreateDto);
+      @Valid @ParameterObject @RequestPart(value = "postCreateDto") PostCreateDto postCreateDto,
+      @Parameter(description = "Post image", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+      @RequestPart(value = "image", required = false)
+          MultipartFile file) {
+    postService.save(postCreateDto, file);
     return ResponseEntity.ok("Post created successfully");
   }
 

@@ -15,6 +15,10 @@ spring:
     baselineOnMigrate: true
     enabled: true
     schemas: public
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 #JWT token
 security:
@@ -48,6 +52,16 @@ management:
   endpoint:
     metrics:
       enabled: true
+
+#Minio
+cloud:
+  minio:
+    region.static: ${MINIO_REGION:ru-central1-a}
+    credentials:
+      accessKey: ${MINIO_ACCESS_KEY:citizen-guard}
+      secretKey: ${MINIO_SECRET_KEY:Wbul0ZKySm7EUjRL10mVs0EFNnsk35B1}
+    bucket: ${MINIO_BUCKET:citizen-guard-photos}
+    host: ${MINIO_HOST:http://localhost:9000}
 #Server
 server:
   port: 8080

@@ -3,10 +3,10 @@ version: '3.1'
 services:
   app:
     container_name: diploma-app-backend
-    image: diploma-app-backend
+    image: 51827/diploma-app-backend:latest
     build:
-      context: miras-aigera-diploma-backend
-      dockerfile: Dockerfile
+      context: ../../miras-aigera-diploma-backend
+      dockerfile: ../../miras-aigera-diploma-backend/Dockerfile
     ports:
       - "8080:8080"
     restart: always
@@ -29,12 +29,12 @@ services:
       - "5432:5432"
     restart: always
     environment:
-      - POSTGRES_PASSWORD=zxc
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=citizen-guard-db
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - TZ=Asia/Almaty
+      POSTGRES_PASSWORD: zxc
+      POSTGRES_USER: postgres
+      POSTGRES_DB: citizen-guard-db
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      TZ: Asia/Almaty
     networks:
       - backend
 

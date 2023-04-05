@@ -4,7 +4,6 @@ import kz.iitu.miras_aigera_diploma.converter.user.UserInfoDtoConverter;
 import kz.iitu.miras_aigera_diploma.converter.user.UserMeInfoDtoConverter;
 import kz.iitu.miras_aigera_diploma.converter.user.UserUpdateDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
-import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.dto.user.UserChangePasswordDto;
 import kz.iitu.miras_aigera_diploma.model.dto.user.UserInfoDto;
@@ -68,7 +67,8 @@ public class UserServiceImpl implements UserService {
   public void changePassword(UserChangePasswordDto userChangePasswordDTO) {
     User user = findByUsername(userChangePasswordDTO.getUsername());
     if (!passwordEncoder.matches(userChangePasswordDTO.getPassword(), user.getPassword())) {
-      throw new CustomSecurityException(ApiMessages.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
+      throw new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.BAD_CREDENTIALS,
+          "Bad credentials");
     }
     user.setPassword(passwordEncoder.encode(userChangePasswordDTO.getNewPassword()));
 

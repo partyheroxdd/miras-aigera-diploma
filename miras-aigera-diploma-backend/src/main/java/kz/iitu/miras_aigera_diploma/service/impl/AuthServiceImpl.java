@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import kz.iitu.miras_aigera_diploma.converter.user.UserRegisterDtoConverter;
 import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
-import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import kz.iitu.miras_aigera_diploma.model.constants.ApiMessages;
 import kz.iitu.miras_aigera_diploma.model.dto.user.UserLoginDto;
 import kz.iitu.miras_aigera_diploma.model.dto.user.UserRegisterDto;
@@ -43,7 +42,8 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public AccessToken register(UserRegisterDto userRegisterDto) {
     if (!userRegisterDto.getUsername().matches("^\\d{12}$")) {
-      throw new CustomSecurityException(ApiMessages.INVALID_USERNAME, HttpStatus.BAD_REQUEST);
+      throw new DiplomaCoreException(HttpStatus.BAD_REQUEST, ApiMessages.INVALID_USERNAME,
+          "Username must be 12 digit IIN format");
     }
 
     Set<Role> roles = new HashSet<>();

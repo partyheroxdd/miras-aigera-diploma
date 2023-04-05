@@ -27,5 +27,9 @@ public class PostInfoDtoConverter extends AbstractConverter<Post, PostInfoDto> {
       target.setAdditionalInfo(source.getAdditionalInfo());
     }
     target.setUsername(source.getUser().getUsername());
+
+    if (Objects.nonNull(source.getImageUrl())) {
+      target.setImageUrl(source.getImageUrl());
+    }
   }
 }
