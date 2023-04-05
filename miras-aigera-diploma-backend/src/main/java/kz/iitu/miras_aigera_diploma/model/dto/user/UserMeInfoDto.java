@@ -24,4 +24,10 @@ public class UserMeInfoDto {
 
   @Schema(description = "User firstname", example = "Miras")
   String firstName;
+
+  @Schema(description = "User district", example = "Bostandyksky")
+  String district;
+
+  @Schema(description = "User city", example = "Almaty")
+  String city;
 }

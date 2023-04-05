@@ -14,5 +14,7 @@ public class UserMeInfoDtoConverter extends AbstractConverter<User, UserMeInfoDt
     target.setUsername(source.getUsername());
     target.setRole(JwtUtil.getRole());
     target.setFirstName(source.getFirstname());
+    target.setDistrict(source.getDistrict().getName());
+    target.setCity(source.getCity().getName());
   }
 }

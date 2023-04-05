@@ -1,0 +1,18 @@
+insert into districts(name, city_id)
+values ('Aktau', 1),
+       ('Aktobe', 2),
+       ('Atyrau', 3),
+       ('Zhezkazgan', 4),
+       ('Karaganda', 5),
+       ('Kokshetau', 6),
+       ('Konaev', 7),
+       ('Kostanay', 8),
+       ('Kyzylorda', 9),
+       ('Pavlodar', 10),
+       ('Petropavlovsk', 11),
+       ('Semey', 12),
+       ('Taldykorgan', 13),
+       ('Taraz', 14),
+       ('Turkestan', 15),
+       ('Uralsk', 16),
+       ('Ust-Kamenogorsk', 17);
