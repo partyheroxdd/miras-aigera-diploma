@@ -2,8 +2,8 @@
 version: '3.1'
 services:
   app:
-    container_name: diploma-app-backend
-    image: diploma-app-backend
+    container_name: citizen-guard-server
+    image: citizen-guard-server
     build:
       context: miras-aigera-diploma-backend
       dockerfile: Dockerfile

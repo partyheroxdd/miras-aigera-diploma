@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.converter.user;
 
+import java.util.Objects;
 import kz.iitu.miras_aigera_diploma.model.dto.user.UserMeInfoDto;
 import kz.iitu.miras_aigera_diploma.model.entity.User;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
@@ -14,7 +15,9 @@ public class UserMeInfoDtoConverter extends AbstractConverter<User, UserMeInfoDt
     target.setUsername(source.getUsername());
     target.setRole(JwtUtil.getRole());
     target.setFirstName(source.getFirstname());
-    target.setDistrict(source.getDistrict().getName());
+    if (Objects.nonNull(source.getDistrict())) {
+      target.setDistrict(source.getDistrict().getName());
+    }
     target.setCity(source.getCity().getName());
   }
 }
