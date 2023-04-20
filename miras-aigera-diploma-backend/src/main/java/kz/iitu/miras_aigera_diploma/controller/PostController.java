@@ -5,13 +5,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Valid;
+import java.sql.Timestamp;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostChangeStatusDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostCreateDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostInfoDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostListInfoDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostSearchDto;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
+import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import lombok.AccessLevel;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,10 +55,23 @@ public class PostController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Method to save new post")
   public ResponseEntity<String> save(
-      @Valid @RequestPart(value = "postCreateDto") PostCreateDto postCreateDto,
+      @RequestParam(value = "city") String city,
+      @RequestParam(value = "district", required = false) String district,
+      @RequestParam(value = "incidentTime") String incidentTime,
+      @RequestParam(value = "category") CategoryCode category,
+      @RequestParam(value = "description") String description,
+      @RequestParam(value = "additionalInfo", required = false) String additionalInfo,
       @Parameter(description = "Post image", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
       @RequestPart(value = "image", required = false)
           MultipartFile file) {
+    PostCreateDto postCreateDto = PostCreateDto.builder()
+        .city(city)
+        .district(district)
+        .incidentTime(incidentTime)
+        .category(category)
+        .description(description)
+        .additionalInfo(additionalInfo)
+        .build();
     postService.save(postCreateDto, file);
     return ResponseEntity.ok("Post created successfully");
   }

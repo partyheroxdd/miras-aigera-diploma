@@ -6,7 +6,7 @@ import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class PostStatusAndDateTimeUtil {
+public class PostStatusUtil {
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 

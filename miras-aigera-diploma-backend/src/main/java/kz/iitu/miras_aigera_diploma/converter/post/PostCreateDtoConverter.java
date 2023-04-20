@@ -9,6 +9,7 @@ import kz.iitu.miras_aigera_diploma.repository.DistrictRepository;
 import kz.iitu.miras_aigera_diploma.repository.PostCategoryRepository;
 import kz.iitu.miras_aigera_diploma.repository.PostStatusRepository;
 import kz.iitu.miras_aigera_diploma.service.UserService;
+import kz.iitu.miras_aigera_diploma.util.DateTimeUtil;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import kz.iitu.miras_aigera_diploma.util.PostNumberUtil;
 import kz.iitu.miras_aigera_diploma.util.must_have.converter.AbstractConverter;
@@ -38,7 +39,7 @@ public class PostCreateDtoConverter extends AbstractConverter<PostCreateDto, Pos
       target.setDistrict(districtRepository.findByName(source.getDistrict()));
     }
     target.setStatus(postStatusRepository.findByCode(StatusCode.UNDER_CONSIDERATION));
-    target.setDateTime(source.getIncidentTime());
+    target.setDateTime(DateTimeUtil.toLocalDateTime(source.getIncidentTime()));
     target.setCategory(postCategoryRepository.findByCode(source.getCategory()));
     target.setUser(userService.findByUsername(JwtUtil.getUsername()));
     target.setDescription(source.getDescription());

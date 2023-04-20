@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Schema(description = "DTO for create posts")
 public class PostCreateDto {
 
@@ -33,7 +35,7 @@ public class PostCreateDto {
   @Schema(description = "Incident time", type = "string", pattern = "dd-MM-yyyy HH:mm", example = "25-03-2022 13:10")
   @JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
   @NotNull(message = "Incident time field required")
-  LocalDateTime incidentTime;
+  String incidentTime;
 
   @Schema(description = "Post category code", example = "LOSS_PROPERTY")
   @NotNull(message = "Post category field required")
