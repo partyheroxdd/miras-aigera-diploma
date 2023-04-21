@@ -53,13 +53,9 @@ public class PostServiceImpl implements PostService {
   @Override
   @Transactional
   public void save(PostCreateDto postCreateDto, MultipartFile file) {
-    log.info("postCreateDto {}", postCreateDto);
     try {
-      if (Objects.nonNull(file)) {
-        FileUtil.check(file);
-      }
+      FileUtil.checkContentType(file);
       Post post = postCreateDtoConverter.convert(postCreateDto);
-
       post.setImageUrl(cdnMinioService.uploadFile(file));
       postRepository.save(post);
     } catch (Exception e) {

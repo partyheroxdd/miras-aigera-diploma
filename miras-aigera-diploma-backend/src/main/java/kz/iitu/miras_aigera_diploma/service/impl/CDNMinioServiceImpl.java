@@ -44,21 +44,21 @@ public class CDNMinioServiceImpl implements CDNMinioService {
 
   @Override
   public String uploadFile(MultipartFile multipartFile) {
-    if (multipartFile == null) {
-      throw new IllegalArgumentException(NULL_FILE_ERROR_MESSAGE);
+    if (Objects.nonNull(multipartFile) && Objects.nonNull(multipartFile.getContentType())) {
+      log.info(String.format(UPLOADING_FILE_SIZE_LOG_MESSAGE, multipartFile.getSize()));
+      try {
+        File file = convertMultiPartFileToFile(multipartFile);
+        String bucketKey = uploadFileToS3BucketAndGetKey(file);
+        file.delete();
+        return String.format(host) + "/" + bucket + "/" + bucketKey;
+      } catch (AmazonServiceException e) {
+        log.error(String.format(UPLOAD_FILE_ERROR_LOG_MESSAGE, multipartFile.getOriginalFilename()),
+            e);
+        throw new DiplomaCoreException(HttpStatus.INTERNAL_SERVER_ERROR, UPLOAD_FILE_ERROR_CODE,
+            multipartFile.getOriginalFilename());
+      }
     }
-    log.info(String.format(UPLOADING_FILE_SIZE_LOG_MESSAGE, multipartFile.getSize()));
-    try {
-      File file = convertMultiPartFileToFile(multipartFile);
-      String bucketKey = uploadFileToS3BucketAndGetKey(file);
-      file.delete();
-      return String.format(host) + "/" + bucket + "/" + bucketKey;
-    } catch (AmazonServiceException e) {
-      log.error(String.format(UPLOAD_FILE_ERROR_LOG_MESSAGE, multipartFile.getOriginalFilename()),
-          e);
-      throw new DiplomaCoreException(HttpStatus.INTERNAL_SERVER_ERROR, UPLOAD_FILE_ERROR_CODE,
-          multipartFile.getOriginalFilename());
-    }
+    return null;
   }
 
   @Override
