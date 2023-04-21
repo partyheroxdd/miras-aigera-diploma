@@ -26,6 +26,7 @@ import kz.iitu.miras_aigera_diploma.util.spec.PostSpec;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Slf4j
 public class PostServiceImpl implements PostService {
 
   PostRepository postRepository;
@@ -51,13 +53,18 @@ public class PostServiceImpl implements PostService {
   @Override
   @Transactional
   public void save(PostCreateDto postCreateDto, MultipartFile file) {
-    if (Objects.nonNull(file)) {
-      FileUtil.check(file);
-    }
-    Post post = postCreateDtoConverter.convert(postCreateDto);
+    log.info("postCreateDto {}", postCreateDto);
+    try {
+      if (Objects.nonNull(file)) {
+        FileUtil.check(file);
+      }
+      Post post = postCreateDtoConverter.convert(postCreateDto);
 
-    post.setImageUrl(cdnMinioService.uploadFile(file));
-    postRepository.save(post);
+      post.setImageUrl(cdnMinioService.uploadFile(file));
+      postRepository.save(post);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
   }
 
   @Override

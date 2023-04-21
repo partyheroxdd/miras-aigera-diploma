@@ -3,7 +3,6 @@ package kz.iitu.miras_aigera_diploma.exception_handler;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import kz.iitu.miras_aigera_diploma.exceptions.DiplomaCoreException;
 import kz.iitu.miras_aigera_diploma.exceptions.security.CustomSecurityException;
 import lombok.AllArgsConstructor;
@@ -41,7 +40,7 @@ public class GlobalControllerExceptionHandler {
     List<String> errors =
         ex.getBindingResult().getFieldErrors().stream()
             .map(i -> i.getField() + " " + i.getDefaultMessage())
-            .collect(Collectors.toList());
+            .toList();
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
