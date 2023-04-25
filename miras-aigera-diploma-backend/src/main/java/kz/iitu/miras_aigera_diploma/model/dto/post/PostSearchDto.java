@@ -2,6 +2,8 @@ package kz.iitu.miras_aigera_diploma.model.dto.post;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
+import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
+import kz.iitu.miras_aigera_diploma.model.enums.StatusCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,18 +28,18 @@ public class PostSearchDto {
   @DateTimeFormat(pattern = "dd-MM-yyyy")
   Date dateTo;
 
-  @Schema(description = "District filter", example = "5")
-  Long districtId;
+  @Schema(description = "District filter", example = "Bostandyksky")
+  String district;
 
-  @Schema(description = "City filter", example = "16")
-  Long cityId;
+  @Schema(description = "City filter", example = "Almaty")
+  String city;
 
-  @Schema(description = "Post category filter", example = "1")
-  Long categoryId;
+  @Schema(description = "Post category filter", example = "LOSS_PROPERTY")
+  CategoryCode category;
 
-  @Schema(description = "Post status filter", example = "1")
-  Long statusId;
+  @Schema(description = "Post status filter", example = "APPROVED")
+  StatusCode status;
 
-  @Schema(description = "Query search for category, post number, district, city")
+  @Schema(description = "Query search for post number")
   String query;
 }

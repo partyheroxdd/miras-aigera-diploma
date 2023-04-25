@@ -18,7 +18,6 @@ import kz.iitu.miras_aigera_diploma.repository.PostStatusRepository;
 import kz.iitu.miras_aigera_diploma.service.CDNMinioService;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.service.UserService;
-import kz.iitu.miras_aigera_diploma.util.FileUtil;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
 import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import kz.iitu.miras_aigera_diploma.util.must_have.specification.SpecificationBuilder;
@@ -54,7 +53,6 @@ public class PostServiceImpl implements PostService {
   @Transactional
   public void save(PostCreateDto postCreateDto, MultipartFile file) {
     try {
-      FileUtil.checkContentType(file);
       Post post = postCreateDtoConverter.convert(postCreateDto);
       post.setImageUrl(cdnMinioService.uploadFile(file));
       postRepository.save(post);
@@ -95,24 +93,24 @@ public class PostServiceImpl implements PostService {
     switch (role) {
       case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
       case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(
-          PostSpec.districtFilter(user.getDistrict().getId()));
-      case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getId()));
+          PostSpec.districtFilter(user.getDistrict().getName()));
+      case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getName()));
     }
 
     if (Objects.nonNull(dto.getDateFrom()) && Objects.nonNull(dto.getDateTo())) {
       postSpec.and(PostSpec.dateFilter(dto.getDateFrom(), dto.getDateTo()));
     }
-    if (Objects.nonNull(dto.getDistrictId())) {
-      postSpec.and(PostSpec.districtFilter(dto.getDistrictId()));
+    if (Objects.nonNull(dto.getDistrict())) {
+      postSpec.and(PostSpec.districtFilter(dto.getDistrict()));
     }
-    if (Objects.nonNull(dto.getCityId())) {
-      postSpec.and(PostSpec.cityFilter(dto.getCityId()));
+    if (Objects.nonNull(dto.getCity())) {
+      postSpec.and(PostSpec.cityFilter(dto.getCity()));
     }
-    if (Objects.nonNull(dto.getCategoryId())) {
-      postSpec.and(PostSpec.categoryFilter(dto.getCategoryId()));
+    if (Objects.nonNull(dto.getCategory())) {
+      postSpec.and(PostSpec.categoryFilter(dto.getCategory()));
     }
-    if (Objects.nonNull(dto.getStatusId())) {
-      postSpec.and(PostSpec.statusFilter(dto.getStatusId()));
+    if (Objects.nonNull(dto.getStatus())) {
+      postSpec.and(PostSpec.statusFilter(dto.getStatus()));
     }
     if (Objects.nonNull(dto.getQuery())) {
       postSpec.and(PostSpec.queryFilter(dto.getQuery()));

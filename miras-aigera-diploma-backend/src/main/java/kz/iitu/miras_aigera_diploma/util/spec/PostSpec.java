@@ -1,10 +1,14 @@
 package kz.iitu.miras_aigera_diploma.util.spec;
 
 import java.util.Date;
+import kz.iitu.miras_aigera_diploma.model.entity.BaseEntity;
 import kz.iitu.miras_aigera_diploma.model.entity.City;
 import kz.iitu.miras_aigera_diploma.model.entity.District;
 import kz.iitu.miras_aigera_diploma.model.entity.Post;
 import kz.iitu.miras_aigera_diploma.model.entity.PostCategory;
+import kz.iitu.miras_aigera_diploma.model.entity.PostStatus;
+import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
+import kz.iitu.miras_aigera_diploma.model.enums.StatusCode;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,23 +17,24 @@ import org.springframework.data.jpa.domain.Specification;
 public class PostSpec {
 
   public Specification<Post> userFilter(Long userId) {
-    return (r, cq, cb) -> r.join(Post.Fields.user).in(userId);
+    return (r, cq, cb) -> cb.equal(r.get(Post.Fields.user).get(BaseEntity.Fields.id), userId);
   }
 
-  public Specification<Post> districtFilter(Long districtId) {
-    return (r, cq, cb) -> r.join(Post.Fields.district).in(districtId);
+  public Specification<Post> districtFilter(String district) {
+    return (r, cq, cb) -> cb.equal(r.get(Post.Fields.district).get(District.Fields.name), district);
   }
 
-  public Specification<Post> cityFilter(Long cityId) {
-    return (r, cq, cb) -> r.join(Post.Fields.city).in(cityId);
+  public Specification<Post> cityFilter(String city) {
+    return (r, cq, cb) -> cb.equal(r.get(Post.Fields.city).get(City.Fields.name), city);
   }
 
-  public Specification<Post> categoryFilter(Long categoryId) {
-    return (r, cq, cb) -> r.join(Post.Fields.category).in(categoryId);
+  public Specification<Post> categoryFilter(CategoryCode category) {
+    return (r, cq, cb) -> cb.equal(r.get(Post.Fields.category).get(PostCategory.Fields.code),
+        category);
   }
 
-  public Specification<Post> statusFilter(Long statusId) {
-    return (r, cq, cb) -> r.join(Post.Fields.status).in(statusId);
+  public Specification<Post> statusFilter(StatusCode status) {
+    return (r, cq, cb) -> cb.equal(r.get(Post.Fields.status).get(PostStatus.Fields.code), status);
   }
 
   public Specification<Post> dateFilter(Date dateFrom, Date dateTo) {
@@ -38,18 +43,7 @@ public class PostSpec {
   }
 
   public Specification<Post> queryFilter(String query) {
-    return (root, cq, cb) -> cb.and(cb.or(
-            cb.like(cb.lower(root.get(Post.Fields.category)
-                .get(PostCategory.Fields.name).as(String.class)), "%" + query.toLowerCase() + "%"),
-            cb.like(cb.lower(root.get(Post.Fields.number).as(String.class)),
-                "%" + query.toLowerCase() + "%"),
-            cb.like(cb.lower(root.get(Post.Fields.district)
-                    .get(District.Fields.name).as(String.class)),
-                "%" + query.toLowerCase() + "%"),
-            cb.like(cb.lower(root.get(Post.Fields.city)
-                    .get(City.Fields.name).as(String.class)),
-                "%" + query.toLowerCase() + "%")
-        )
-    );
+    return (root, cq, cb) -> cb.and(cb.like(cb.lower(root.get(Post.Fields.number).as(String.class)),
+        "%" + query.toLowerCase() + "%"));
   }
 }
