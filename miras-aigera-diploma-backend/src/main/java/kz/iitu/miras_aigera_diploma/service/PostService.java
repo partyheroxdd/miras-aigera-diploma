@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.service;
 
+import java.util.List;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostChangeStatusDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostCreateDto;
 import kz.iitu.miras_aigera_diploma.model.dto.post.PostInfoDto;
@@ -15,7 +16,7 @@ public interface PostService {
 
   PostInfoDto findById(Long id);
 
-  PageDTO<PostListInfoDto> findAll(PostSearchDto postSearchDto, Pageable pageable);
+  List<PostListInfoDto> findAll(PostSearchDto postSearchDto);
 
   void changeStatus(PostChangeStatusDto postChangeStatusDto);
 }

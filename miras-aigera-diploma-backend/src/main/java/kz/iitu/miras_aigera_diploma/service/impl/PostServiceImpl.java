@@ -1,5 +1,6 @@
 package kz.iitu.miras_aigera_diploma.service.impl;
 
+import java.util.List;
 import java.util.Objects;
 import kz.iitu.miras_aigera_diploma.converter.post.PostCreateDtoConverter;
 import kz.iitu.miras_aigera_diploma.converter.post.PostInfoDtoConverter;
@@ -19,14 +20,12 @@ import kz.iitu.miras_aigera_diploma.service.CDNMinioService;
 import kz.iitu.miras_aigera_diploma.service.PostService;
 import kz.iitu.miras_aigera_diploma.service.UserService;
 import kz.iitu.miras_aigera_diploma.util.JwtUtil;
-import kz.iitu.miras_aigera_diploma.util.must_have.dto_util.PageDTO;
 import kz.iitu.miras_aigera_diploma.util.must_have.specification.SpecificationBuilder;
 import kz.iitu.miras_aigera_diploma.util.spec.PostSpec;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -83,12 +82,12 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional(readOnly = true)
-  public PageDTO<PostListInfoDto> findAll(PostSearchDto dto, Pageable pageable) {
-
-    Specification<Post> postSpec = new SpecificationBuilder<>();
+  public List<PostListInfoDto> findAll(PostSearchDto dto) {
 
     User user = userService.findByUsername(JwtUtil.getUsername());
     String role = JwtUtil.getRole();
+
+    Specification<Post> postSpec = new SpecificationBuilder<>();
 
     switch (role) {
       case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
@@ -115,6 +114,9 @@ public class PostServiceImpl implements PostService {
     if (Objects.nonNull(dto.getQuery())) {
       postSpec.and(PostSpec.queryFilter(dto.getQuery()));
     }
-    return postListInfoDtoConverter.convert(postRepository.findAll(postSpec, pageable));
+
+    postSpec.and(PostSpec.postOrderByCreatedDate());
+
+    return postListInfoDtoConverter.convert(postRepository.findAll(postSpec));
   }
 }
