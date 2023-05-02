@@ -89,13 +89,14 @@ public class PostServiceImpl implements PostService {
 
     Specification<Post> postSpec = new SpecificationBuilder<>();
 
-    switch (role) {
-      case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
-      case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(
-          PostSpec.districtFilter(user.getDistrict().getName()));
-      case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getName()));
+    if (Objects.isNull(dto.getDistrict()) && Objects.isNull(dto.getCity())) {
+      switch (role) {
+        case "ROLE_USER" -> postSpec.and(PostSpec.userFilter(user.getId()));
+        case "ROLE_DISTRICT_POLICEMAN" -> postSpec.and(
+            PostSpec.districtFilter(user.getDistrict().getName()));
+        case "ROLE_PROSECUTOR" -> postSpec.and(PostSpec.cityFilter(user.getCity().getName()));
+      }
     }
-
     if (Objects.nonNull(dto.getDateFrom()) && Objects.nonNull(dto.getDateTo())) {
       postSpec.and(PostSpec.dateFilter(dto.getDateFrom(), dto.getDateTo()));
     }
