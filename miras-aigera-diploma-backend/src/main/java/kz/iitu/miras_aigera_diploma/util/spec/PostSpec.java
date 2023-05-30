@@ -1,5 +1,8 @@
 package kz.iitu.miras_aigera_diploma.util.spec;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +16,6 @@ import kz.iitu.miras_aigera_diploma.model.entity.PostStatus;
 import kz.iitu.miras_aigera_diploma.model.enums.CategoryCode;
 import kz.iitu.miras_aigera_diploma.model.enums.StatusCode;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,8 +45,14 @@ public class PostSpec {
   }
 
   public Specification<Post> dateFilter(Date dateFrom, Date dateTo) {
-    return (r, cq, cb) -> cb.and(cb.greaterThanOrEqualTo(r.get(Post.Fields.createdAt), dateFrom),
-        cb.lessThan(r.get(Post.Fields.createdAt), DateUtils.addDays(dateTo, 1)));
+    LocalDateTime localDateTimeFrom = dateFrom.toInstant().atZone(ZoneId.systemDefault())
+        .toLocalDateTime();
+    LocalDateTime localDateTimeTo = dateTo.toInstant().atZone(ZoneId.systemDefault())
+        .toLocalDateTime();
+    return (r, cq, cb) -> cb.and(
+        cb.greaterThanOrEqualTo(r.get(Post.Fields.dateTime), localDateTimeFrom),
+        cb.lessThan(r.get(Post.Fields.dateTime), localDateTimeTo.plus(1, ChronoUnit.DAYS))
+    );
   }
 
   public Specification<Post> queryFilter(String query) {
